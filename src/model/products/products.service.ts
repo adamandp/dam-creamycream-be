@@ -1,3 +1,4 @@
+import { assertImageFile } from 'src/config/multer.config';
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -236,6 +237,7 @@ export class ProductsService {
     id: string,
     file: Express.Multer.File,
   ): Promise<WebResponse> {
+    assertImageFile(file);
     const { imageUrl } = await this.prisma.product.findUniqueOrThrow({
       where: { id },
       select: { imageUrl: true },

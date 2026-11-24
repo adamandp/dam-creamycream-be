@@ -13,6 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
+// Retained only for staged identity migration/rollback; not accessible through Prisma Client.
 model Role {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @unique @db.VarChar(50)
@@ -22,6 +23,7 @@ model Role {
   users User[]
 
   @@map("roles")
+  @@ignore
 }
 
 model User {
@@ -39,17 +41,12 @@ model User {
   createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt   DateTime    @updatedAt @map("updated_at")
 
-  roles             Role               @relation(fields: [roleId], references: [id])
-  cart              Cart?
-  userTokens        UserToken[]
-  orders            Order[]
-  reviews           Review[]
-  userVouchers      UserVoucher[]
-  productAnalytics  ProductAnalytics[]
-  userNotifications UserNotification[]
-  addresses         Address[]
+  roles Role @relation(fields: [roleId], references: [id])
+
+  userTokens UserToken[]
 
   @@map("users")
+  @@ignore
 }
 
 model UserToken {
@@ -64,6 +61,7 @@ model UserToken {
   users User @relation(fields: [userId], references: [id])
 
   @@map("user_tokens")
+  @@ignore
 }
 
 model Address {
@@ -81,9 +79,9 @@ model Address {
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
-  users  User    @relation(fields: [userId], references: [id])
   orders Order[]
 
+  @@index([userId])
   @@map("addresses")
 }
 
@@ -145,7 +143,6 @@ model Cart {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  users     User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
   @@map("carts")
@@ -178,13 +175,14 @@ model Order {
   createdAt      DateTime    @default(now()) @map("created_at")
   updatedAt      DateTime    @updatedAt @map("updated_at")
 
-  addresses  Address        @relation(fields: [addressId], references: [id])
-  users      User           @relation(fields: [userId], references: [id])
+  addresses Address @relation(fields: [addressId], references: [id])
+
   vouchers   OrderVoucher[]
   orderItems OrderItem[]
   payments   Payment[]
   shipments  Shipment[]
 
+  @@index([userId])
   @@map("orders")
 }
 
@@ -256,17 +254,19 @@ model Shipment {
 }
 
 model Review {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
-  productId String   @map("product_id") @db.Uuid
-  rating    Int      @db.Integer
-  comment   String?  @db.VarChar(255)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  reviewerName     String?  @map("reviewer_name") @db.VarChar(255)
+  reviewerImageUrl String?  @map("reviewer_image_url") @db.Text
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  productId        String   @map("product_id") @db.Uuid
+  rating           Int      @db.Integer
+  comment          String?  @db.VarChar(255)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  users    User    @relation(fields: [userId], references: [id])
   products Product @relation(fields: [productId], references: [id])
 
+  @@index([userId])
   @@map("reviews")
 }
 
@@ -310,9 +310,9 @@ model ProductInformation {
   id                 String   @id @default(uuid()) @db.Uuid
   productId          String   @unique @map("product_id") @db.Uuid
   highlights         Json
-  servingSuggestions Json @map("serving_suggestions")
-  productDetails     Json @map("product_details")
-  whyChoose          String   @db.Text @map("why_choose")
+  servingSuggestions Json     @map("serving_suggestions")
+  productDetails     Json     @map("product_details")
+  whyChoose          String   @map("why_choose") @db.Text
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
 
@@ -358,8 +358,8 @@ model UserVoucher {
   updatedAt DateTime          @updatedAt @map("updated_at")
 
   vouchers Voucher @relation(fields: [voucherId], references: [id])
-  users    User    @relation(fields: [userId], references: [id])
 
+  @@index([userId])
   @@map("user_vouchers")
 }
 
@@ -370,8 +370,8 @@ model ProductAnalytics {
   createdAt DateTime @default(now()) @map("created_at")
 
   products Product @relation(fields: [productId], references: [id])
-  users    User    @relation(fields: [userId], references: [id])
 
+  @@index([userId])
   @@map("product_analytics")
 }
 
@@ -396,17 +396,9 @@ model UserNotification {
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   notifications Notification @relation(fields: [notificationId], references: [id])
-  users         User         @relation(fields: [userId], references: [id])
 
+  @@index([userId])
   @@map("user_notifications")
-}
-
-enum GenderType {
-  MALE
-  FEMALE
-  OTHER
-
-  @@map("GENDER_TYPE")
 }
 
 enum OrderStatus {
@@ -466,4 +458,12 @@ enum UserVoucherStatus {
   CLAIMED
 
   @@map("USER_VOUCHER_STATUS")
+}
+
+enum GenderType {
+  MALE
+  FEMALE
+  OTHER
+
+  @@map("GENDER_TYPE")
 }

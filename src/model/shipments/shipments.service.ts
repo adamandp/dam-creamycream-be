@@ -87,6 +87,8 @@ export class ShipmentsService {
         `${this.configService.get<string>('RAJAONGKIR_BASE_URL')}/calculate/domestic-cost`,
         data,
         {
+          timeout: 5000,
+          maxRedirects: 0,
           headers: {
             key: this.configService.get<string>('RAJAONGKIR_API_KEY'),
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,8 +96,8 @@ export class ShipmentsService {
         },
       ),
     )
-      .catch((error) => {
-        this.logger.error(error);
+      .catch(() => {
+        this.logger.error('Shipping provider request failed');
         throw new InternalServerErrorException(
           ErrorMessage.create('Shipping cost'),
         );

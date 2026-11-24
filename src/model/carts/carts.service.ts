@@ -3,21 +3,20 @@ import { AddToCartDto } from './dto/add-to-cart.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { UsersService } from '../users/users.service';
 import { ProductsService } from '../products/products.service';
 import { RemoveFromCartDto } from './dto/remove-from-cart';
 import { WebResponse } from 'src/common/common.interface';
 import { Messages } from 'src/utils/message.helper';
 import { PaginationDto } from 'src/common/common.dto';
 import { FindByUserCartDto as FindByUserDto } from './carts.interface';
-import { JwtPayload } from '../session/session.interface';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
 @Injectable()
 export class CartsService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
-    private readonly user: UsersService,
+
     private readonly product: ProductsService,
   ) {
     this.logger.setContext(CartsService.name);
@@ -38,12 +37,13 @@ export class CartsService {
   }
 
   async addToCart(userId: string, body: AddToCartDto): Promise<WebResponse> {
-    await this.user.validateUser(userId);
     await this.product.validateProduct(body.productId);
     return await this.prisma
       .$transaction(async (tx) => {
-        const { id: cartId } = await tx.cart.findUniqueOrThrow({
+        const { id: cartId } = await tx.cart.upsert({
           where: { userId },
+          update: {},
+          create: { userId },
           select: { id: true },
         });
         await tx.cartItem.upsert({
@@ -75,7 +75,6 @@ export class CartsService {
     userId: string,
     body: RemoveFromCartDto,
   ): Promise<WebResponse> {
-    await this.user.validateUser(userId);
     await this.product.validateProduct(body.productId);
     return await this.prisma
       .$transaction(async (tx) => {

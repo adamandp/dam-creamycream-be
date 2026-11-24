@@ -11,7 +11,7 @@ export class HandleAddressOrder {
 
   async validate(
     tx: Prisma.TransactionClient,
-    { addressId }: OrderInputDto,
+    { addressId, userId }: OrderInputDto,
   ): Promise<void> {
     const method = 'validate';
 
@@ -20,7 +20,7 @@ export class HandleAddressOrder {
       message: `Starting address validation`,
     });
 
-    await tx.address.findUniqueOrThrow({ where: { id: addressId } });
+    await tx.address.findUniqueOrThrow({ where: { id: addressId, userId } });
 
     this.logger.trace({
       method,

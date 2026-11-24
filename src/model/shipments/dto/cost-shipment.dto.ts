@@ -10,8 +10,8 @@ const CostSchema = z
   })
   .strict();
 
-class CostDto
+export class CostDto
   extends createZodDto(CostSchema)
   implements z.infer<typeof CostSchema> {}
 
-export type { CostSchema, CostDto };
+export { CostSchema };

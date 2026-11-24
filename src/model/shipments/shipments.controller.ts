@@ -1,3 +1,4 @@
+import { Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -18,8 +19,9 @@ import {
   ShippingData,
 } from './shipments.interface';
 import { PinoLogger } from 'nestjs-pino';
-import type { CostDto } from './dto/cost-shipment.dto';
+import { CostDto } from './dto/cost-shipment.dto';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('shipments')
 export class ShipmentsController {
   constructor(
@@ -51,6 +53,7 @@ export class ShipmentsController {
     return this.shipmentsService.updateStatus(id, body);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Post('cost')
   async cost(@Body() request: CostDto): Promise<WebResponse<ShippingData[]>> {
     return await this.shipmentsService.cost(request);

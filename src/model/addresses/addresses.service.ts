@@ -6,7 +6,6 @@ import { WebResponse } from 'src/common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { ErrorMessage, Messages } from 'src/utils/message.helper';
-import { UsersService } from '../users/users.service';
 import { NotFoundException } from 'src/exceptions';
 import {
   FindAllAddressResDto as FindAllDto,
@@ -15,16 +14,14 @@ import {
   ValidateAddressResDto as ValidateDto,
 } from './addresses.interface';
 import { validateUpdate } from 'src/utils/validate-update';
-import { JwtService } from '@nestjs/jwt';
 import { PinoLogger } from 'nestjs-pino';
-import { JwtPayload } from '../session/session.interface';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
 @Injectable()
 export class AddressesService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly user: UsersService,
-    private readonly jwt: JwtService,
+
     private readonly logger: PinoLogger,
   ) {
     this.logger.setContext(AddressesService.name);
@@ -32,21 +29,24 @@ export class AddressesService {
 
   private name = 'Address';
 
-  async create(body: CreateAddressDto): Promise<WebResponse> {
-    await this.user.validateUser(body.userId);
+  async create(
+    body: CreateAddressDto,
+    actor: JwtPayload,
+  ): Promise<WebResponse> {
+    const data = { ...body, userId: actor.sub };
     return await this.prisma
       .$transaction(async (tx) => {
         const count = await tx.address.count({
-          where: { userId: body.userId },
+          where: { userId: data.userId },
         });
-        if (count === 0) body.isPrimary = true;
-        if (body.isPrimary) {
+        if (count === 0) data.isPrimary = true;
+        if (data.isPrimary) {
           await tx.address.updateMany({
-            where: { userId: body.userId, isPrimary: true },
+            where: { userId: data.userId, isPrimary: true },
             data: { isPrimary: false },
           });
         }
-        await tx.address.create({ data: body });
+        await tx.address.create({ data });
       })
       .then(() => ({ statusCode: 201, message: Messages.create(this.name) }));
   }
@@ -86,9 +86,12 @@ export class AddressesService {
       }));
   }
 
-  async findById(id: string): Promise<WebResponse<FindByIdDto>> {
+  async findById(
+    id: string,
+    actor: JwtPayload,
+  ): Promise<WebResponse<FindByIdDto>> {
     return await this.prisma.address
-      .findUniqueOrThrow({ where: { id } })
+      .findUniqueOrThrow({ where: { id, userId: actor.sub } })
       .then((address) => ({
         message: Messages.get(this.name),
         data: address,
@@ -107,25 +110,32 @@ export class AddressesService {
       });
   }
 
-  async update(id: string, body: UpdateAddressDto): Promise<WebResponse> {
-    const exsitingAddress = await this.validateAddress(id);
+  async update(
+    id: string,
+    body: UpdateAddressDto,
+    actor: JwtPayload,
+  ): Promise<WebResponse> {
+    const exsitingAddress = await this.findById(id, actor);
+    const { userId: _ignored, ...changes } = body as UpdateAddressDto & {
+      userId?: string;
+    };
     return await this.prisma.address
       .update({
-        where: { id },
-        data: validateUpdate(body, exsitingAddress.data!),
+        where: { id, userId: actor.sub },
+        data: validateUpdate(changes, exsitingAddress.data!),
       })
       .then(() => ({ message: Messages.update(this.name) }));
   }
 
-  async remove(id: string): Promise<WebResponse> {
-    const exisitingAddress = await this.validateAddress(id);
+  async remove(id: string, actor: JwtPayload): Promise<WebResponse> {
+    const exisitingAddress = await this.findById(id, actor);
     return await this.prisma.$transaction(async (tx) => {
       const count = await tx.address.count({
         where: { userId: exisitingAddress.data!.userId },
       });
       if (count <= 1) throw new ConflictException(ErrorMessage.strictDelete);
       return await tx.address
-        .delete({ where: { id } })
+        .delete({ where: { id, userId: actor.sub } })
         .then(() => ({ message: Messages.delete(this.name) }));
     });
   }

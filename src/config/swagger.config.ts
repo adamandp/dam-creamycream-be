@@ -1,13 +1,8 @@
 import { DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
 
 export const swaggerConfig = new DocumentBuilder()
-  .addCookieAuth(
-    'auth-cookie',
-    {
-      type: 'http',
-      in: 'Header',
-      scheme: 'Bearer',
-    },
+  .addBearerAuth(
+    { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
     'accessToken',
   )
   .setTitle('Backend E-Commerce API Documentation')

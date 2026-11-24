@@ -4,6 +4,7 @@ import z from 'zod';
 
 export const CreateAddressSchema = BaseAddressSchema.omit({
   id: true,
+  userId: true,
   updatedAt: true,
   createdAt: true,
 });

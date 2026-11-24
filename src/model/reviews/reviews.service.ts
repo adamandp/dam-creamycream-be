@@ -4,13 +4,11 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { CookieRequest, WebResponse } from 'src/common/common.interface';
+import { WebResponse } from 'src/common/common.interface';
 import { Messages } from 'src/utils/message.helper';
-import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
 import { ProductsService } from '../products/products.service';
 import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException, UnauthorizedException } from 'src/exceptions';
+import { NotFoundException } from 'src/exceptions';
 import {
   ValidateReviewResDto as ValidateDto,
   FindAllReviewResDto as FindAllDto,
@@ -19,16 +17,15 @@ import {
   FindByUserReviewResDto as FindByUserDto,
 } from './reviews.interface';
 import { validateUpdate } from 'src/utils/validate-update';
-import { JwtPayload } from '../session/session.interface';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
 @Injectable()
 export class ReviewsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly logger: PinoLogger,
-    private readonly user: UsersService,
+
     private readonly product: ProductsService,
-    private readonly jwt: JwtService,
   ) {
     this.logger.setContext(ReviewsService.name);
   }
@@ -39,15 +36,30 @@ export class ReviewsService {
     return await this.prisma.review
       .findUniqueOrThrow({
         where: { id },
+        omit: { reviewerName: true, reviewerImageUrl: true },
       })
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
-  async create(body: CreateReviewDto): Promise<WebResponse> {
-    await this.user.validateUser(body.userId);
+  async create(
+    body: CreateReviewDto,
+    actor: JwtPayload,
+    profile: {
+      username: string | null;
+      name: string | null;
+      imageUrl: string | null;
+    },
+  ): Promise<WebResponse> {
     await this.product.validateProduct(body.productId);
     return this.prisma.review
-      .create({ data: body })
+      .create({
+        data: {
+          ...body,
+          userId: actor.sub,
+          reviewerName: profile.username ?? profile.name,
+          reviewerImageUrl: null,
+        },
+      })
       .then(() => ({ message: Messages.create(this.name) }));
   }
 
@@ -58,6 +70,7 @@ export class ReviewsService {
     const skip = Math.max((page - 1) * limit, 0);
     return await Promise.all([
       this.prisma.review.findMany({
+        omit: { reviewerName: true, reviewerImageUrl: true },
         skip,
         take: limit,
       }),
@@ -81,29 +94,26 @@ export class ReviewsService {
     return await this.prisma.review
       .findUniqueOrThrow({
         where: { id },
+        omit: { reviewerName: true, reviewerImageUrl: true },
       })
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
   async findByUser(
-    request: CookieRequest,
+    request: JwtPayload,
     { limit, page }: PaginationDto,
   ): Promise<WebResponse<FindByUserDto>> {
     const skip = Math.max((page - 1) * limit, 0);
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      throw new UnauthorizedException();
-    const { sub }: JwtPayload = await this.jwt.decode(
-      authHeader.replace('Bearer ', ''),
-    );
-    await this.user.validateUser(sub);
+    const { sub } = request;
+
     return await Promise.all([
       this.prisma.review.findMany({
         where: { userId: sub },
+        omit: { reviewerName: true, reviewerImageUrl: true },
         skip,
         take: limit,
       }),
-      this.prisma.review.count(),
+      this.prisma.review.count({ where: { userId: sub } }),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       return {
@@ -124,7 +134,8 @@ export class ReviewsService {
     { limit, page }: PaginationDto,
   ): Promise<WebResponse<FindByProductDto>> {
     const skip = Math.max((page - 1) * limit, 0);
-    await this.product.validateProduct(productId);
+    const product = await this.product.validateProduct(productId);
+    if (!product.data?.isActive) throw new NotFoundException('Product');
     return await Promise.all([
       this.prisma.review.findMany({
         where: { productId },
@@ -133,17 +144,13 @@ export class ReviewsService {
           rating: true,
           comment: true,
           createdAt: true,
-          users: {
-            select: {
-              username: true,
-              imageUrl: true,
-            },
-          },
+          reviewerName: true,
+          reviewerImageUrl: true,
         },
         skip,
         take: limit,
       }),
-      this.prisma.review.count(),
+      this.prisma.review.count({ where: { productId } }),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       const parsedData = data.map((review) => ({
@@ -151,8 +158,8 @@ export class ReviewsService {
         rate: review.rating,
         comment: review.comment,
         createdAt: review.createdAt,
-        name: review.users.username,
-        imageUrl: review.users.imageUrl,
+        name: review.reviewerName ?? 'Customer',
+        imageUrl: review.reviewerImageUrl,
       }));
       return {
         message: Messages.get(this.name),
@@ -167,20 +174,25 @@ export class ReviewsService {
     });
   }
 
-  async update(id: string, body: UpdateReviewDto): Promise<WebResponse> {
-    const exsitingReview = await this.validateReview(id);
+  async update(
+    id: string,
+    body: UpdateReviewDto,
+    actor: JwtPayload,
+  ): Promise<WebResponse> {
+    const exsitingReview = await this.prisma.review.findUniqueOrThrow({
+      where: { id, userId: actor.sub },
+    });
     return this.prisma.review
       .update({
-        where: { id },
-        data: validateUpdate(body, exsitingReview.data!),
+        where: { id, userId: actor.sub },
+        data: validateUpdate(body, exsitingReview),
       })
       .then(() => ({ message: Messages.update(this.name) }));
   }
 
-  async remove(id: string): Promise<WebResponse> {
-    await this.validateReview(id);
+  async remove(id: string, actor: JwtPayload): Promise<WebResponse> {
     return this.prisma.review
-      .delete({ where: { id } })
+      .delete({ where: { id, userId: actor.sub } })
       .then(() => ({ message: Messages.delete(this.name) }));
   }
 }

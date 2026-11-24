@@ -22,7 +22,7 @@ export class ProductService {
 
   async findOne(id: string): Promise<WebResponse<FindOneProductResDto>> {
     const product = await this.prisma.product.findUniqueOrThrow({
-      where: { id },
+      where: { id, isActive: true },
       select: {
         id: true,
         name: true,
@@ -124,6 +124,7 @@ export class ProductService {
       this.prisma.product.findUniqueOrThrow({
         where: {
           id,
+          isActive: true,
         },
         select: {
           description: true,

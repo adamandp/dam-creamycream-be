@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserNotificationDto } from './dto/create-user-notification.dto';
 import { PinoLogger } from 'nestjs-pino';
-import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { CookieRequest, WebResponse } from 'src/common/common.interface';
+import { WebResponse } from 'src/common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Messages } from 'src/utils/message.helper';
 import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException, UnauthorizedException } from 'src/exceptions';
+import { NotFoundException } from 'src/exceptions';
 import {
   ValidateUserNotificationDto as ValidateDto,
   FindAllUserNotificationDto as FindAllDto,
@@ -19,14 +17,13 @@ import {
   FindByNotifiactionUserNotificationDto as FindByNotifiactionDto,
   FindByNotifiactionCountUserNotificationDto as FindByNotificationCount,
 } from './user-notifications.interface';
-import { JwtPayload } from '../session/session.interface';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
 @Injectable()
 export class UserNotificationsService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly jwt: JwtService,
-    private readonly user: UsersService,
+
     private readonly notification: NotificationsService,
     private readonly prisma: PrismaService,
   ) {
@@ -36,7 +33,6 @@ export class UserNotificationsService {
   private name = 'User Notification';
 
   async create(body: CreateUserNotificationDto): Promise<WebResponse> {
-    await this.user.validateUser(body.userId);
     await this.notification.validateNotification(body.notificationId);
     return this.prisma.userNotification
       .create({ data: body })
@@ -84,26 +80,20 @@ export class UserNotificationsService {
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
-  async updateRead(id: string): Promise<WebResponse> {
-    await this.validateUserNotification(id);
+  async updateRead(id: string, actor: JwtPayload): Promise<WebResponse> {
     return await this.prisma.userNotification
       .update({
-        where: { id },
+        where: { id, userId: actor.sub },
         data: { isRead: true },
       })
       .then(() => ({ message: Messages.update(this.name) }));
   }
 
   async findByUser(
-    request: CookieRequest,
+    request: JwtPayload,
     { limit, page }: PaginationDto,
   ): Promise<WebResponse<FindByUserDto>> {
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      throw new UnauthorizedException();
-    const { sub }: JwtPayload = await this.jwt.decode(
-      authHeader.replace('Bearer ', ''),
-    );
+    const { sub } = request;
     const skip = Math.max((page - 1) * limit, 0);
     return await Promise.all([
       this.prisma.userNotification.findMany({
@@ -136,12 +126,12 @@ export class UserNotificationsService {
     const skip = Math.max((page - 1) * limit, 0);
     return await Promise.all([
       this.prisma.userNotification.findMany({
-        where: { userId: id },
+        where: { notificationId: id },
         skip,
         take: limit,
         include: { notifications: true },
       }),
-      this.prisma.userNotification.count({ where: { userId: id } }),
+      this.prisma.userNotification.count({ where: { notificationId: id } }),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       return {
@@ -162,7 +152,7 @@ export class UserNotificationsService {
   ): Promise<WebResponse<FindByNotificationCount>> {
     await this.notification.validateNotification(id);
     return await this.prisma.userNotification
-      .count({ where: { userId: id } })
+      .count({ where: { notificationId: id } })
       .then((data) => ({
         message: Messages.get(this.name),
         data: { count: data },
@@ -170,14 +160,9 @@ export class UserNotificationsService {
   }
 
   async findByUserCount(
-    request: CookieRequest,
+    request: JwtPayload,
   ): Promise<WebResponse<FindByUserCountDto>> {
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      throw new UnauthorizedException();
-    const { sub }: JwtPayload = await this.jwt.decode(
-      authHeader.replace('Bearer ', ''),
-    );
+    const { sub } = request;
     return await this.prisma.userNotification
       .count({ where: { userId: sub } })
       .then((data) => ({

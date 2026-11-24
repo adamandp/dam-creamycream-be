@@ -1,10 +1,7 @@
 import { PrismaClient } from 'src/generated/prisma/client';
 
-export async function seedAddresses(prisma: PrismaClient) {
-  const dummyUser = await prisma.user.findUnique({
-    where: { username: 'DummyUser' },
-    select: { id: true },
-  });
+export async function seedAddresses(prisma: PrismaClient, userIds: string[]) {
+  const dummyUser = { id: userIds[0] };
 
   await prisma.address.createMany({
     data: [
@@ -35,10 +32,7 @@ export async function seedAddresses(prisma: PrismaClient) {
     ],
   });
 
-  const exampleUsers = await prisma.user.findMany({
-    where: { username: { not: 'DummyUser' } },
-    select: { id: true },
-  });
+  const exampleUsers = userIds.slice(1).map((id) => ({ id }));
 
   await prisma.address.createMany({
     data: exampleUsers.flatMap((user) => [

@@ -1,14 +1,8 @@
-import {
-  Catch,
-  ConflictException,
-  ExceptionFilter,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { AxiosError } from 'axios';
-import { startCase } from 'lodash';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import type { Response } from 'express';
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaClientKnownRequestError } from '../generated/prisma/internal/prismaNamespace';
+import { startCase } from 'lodash';
 
 @Catch(PrismaClientKnownRequestError)
 export class CommonFilter implements ExceptionFilter {
@@ -16,27 +10,38 @@ export class CommonFilter implements ExceptionFilter {
     this.logger.setContext(CommonFilter.name);
   }
 
-  catch(exception: PrismaClientKnownRequestError | AxiosError) {
-    if (exception instanceof PrismaClientKnownRequestError) {
-      const model: string = startCase(exception.meta?.modelName as string);
-      const field: string = startCase(exception.meta?.target as string);
-      let message: string;
-
-      switch (exception.code) {
-        case 'P2002':
-          message = `⚡ ${model}${field ? ` ${field}` : ''} already exists! No duplicates allowed! 😆`;
-          this.logger.trace(message);
-          throw new ConflictException(message);
-        case 'P2025':
-          message = `🔍 ${model}${field ? ` ${field}` : ''} not found. Maybe it teleported to another dimension? 🛸`;
-          this.logger.trace(message);
-          throw new NotFoundException(message);
-        default: {
-          this.logger.error(exception.message);
-          throw new InternalServerErrorException(exception.message);
-        }
-      }
+  catch(exception: PrismaClientKnownRequestError, host: ArgumentsHost): void {
+    const res = host.switchToHttp().getResponse<Response>();
+    const model = startCase(String(exception.meta?.modelName ?? 'Record'));
+    if (exception.code === 'P2002') {
+      res
+        .status(409)
+        .json({
+          statusCode: 409,
+          message: model + ' already exists',
+          error: 'Conflict',
+        });
+    } else if (exception.code === 'P2025') {
+      res
+        .status(404)
+        .json({
+          statusCode: 404,
+          message: model + ' not found',
+          error: 'Not Found',
+        });
+    } else if (exception.code === 'P2003') {
+      res
+        .status(409)
+        .json({
+          statusCode: 409,
+          message: 'Related resource conflict',
+          error: 'Conflict',
+        });
+    } else {
+      this.logger.error({ code: exception.code }, 'Database request failed');
+      res
+        .status(500)
+        .json({ statusCode: 500, message: 'Internal server error' });
     }
-    throw new InternalServerErrorException(`🚨 Server error 🚨`);
   }
 }

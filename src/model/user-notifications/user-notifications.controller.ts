@@ -1,3 +1,9 @@
+import { Roles } from 'src/decorators/access.decorator';
+import { AccountsClient } from 'src/integrations/accounts/accounts.client';
+import { Req } from '@nestjs/common';
+import type { Request as ExpressRequest } from 'express';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -7,12 +13,11 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  Request,
 } from '@nestjs/common';
 import { UserNotificationsService } from './user-notifications.service';
 import { CreateUserNotificationDto } from './dto/create-user-notification.dto';
 import { PinoLogger } from 'nestjs-pino';
-import type { CookieRequest, WebResponse } from 'src/common/common.interface';
+import type { WebResponse } from 'src/common/common.interface';
 import { PaginationDto } from 'src/common/common.dto';
 import {
   FindAllUserNotificationDto as FindAllDto,
@@ -23,17 +28,23 @@ import {
   FindByNotifiactionCountUserNotificationDto as FindByNotificationCount,
 } from './user-notifications.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('user-notifications')
 export class UserNotificationsController {
   constructor(
     private readonly service: UserNotificationsService,
     private readonly logger: PinoLogger,
+    private readonly accounts: AccountsClient,
   ) {
     this.logger.setContext(UserNotificationsController.name);
   }
 
   @Post()
-  create(@Body() body: CreateUserNotificationDto): Promise<WebResponse> {
+  async create(
+    @Req() req: ExpressRequest,
+    @Body() body: CreateUserNotificationDto,
+  ): Promise<WebResponse> {
+    await this.accounts.validateTarget(body.userId, req.headers.authorization!);
     return this.service.create(body);
   }
 
@@ -44,6 +55,15 @@ export class UserNotificationsController {
     return this.service.findAll(pagination);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Get('me')
+  findByUser(
+    @CurrentUser() request: JwtPayload,
+    @Query() pagination: PaginationDto,
+  ): Promise<WebResponse<FindByUserDto>> {
+    return this.service.findByUser(request, pagination);
+  }
+
   @Get(':id')
   findById(
     @Param('id', ParseUUIDPipe) id: string,
@@ -51,17 +71,10 @@ export class UserNotificationsController {
     return this.service.findById(id);
   }
 
-  @Get('me')
-  findByUser(
-    @Request() request: CookieRequest,
-    @Query() pagination: PaginationDto,
-  ): Promise<WebResponse<FindByUserDto>> {
-    return this.service.findByUser(request, pagination);
-  }
-
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Get('count/me')
   findByUserCount(
-    @Request() request: CookieRequest,
+    @CurrentUser() request: JwtPayload,
   ): Promise<WebResponse<FindByUserCountDto>> {
     return this.service.findByUserCount(request);
   }
@@ -81,8 +94,12 @@ export class UserNotificationsController {
     return this.service.findByNotificationCount(id);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Patch(':id')
-  updateRead(@Param('id') id: string): Promise<WebResponse> {
-    return this.service.updateRead(id);
+  updateRead(
+    @CurrentUser() actor: JwtPayload,
+    @Param('id') id: string,
+  ): Promise<WebResponse> {
+    return this.service.updateRead(id, actor);
   }
 }

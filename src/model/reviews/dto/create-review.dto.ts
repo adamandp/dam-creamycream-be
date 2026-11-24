@@ -4,6 +4,7 @@ import z from 'zod';
 
 const CreateReviewSchema = BaseReviewSchema.omit({
   id: true,
+  userId: true,
   createdAt: true,
   updatedAt: true,
 });

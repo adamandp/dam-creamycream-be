@@ -8,8 +8,6 @@ export * from './payments';
 export * from './product-discounts';
 export * from './products';
 export * from './reviews';
-export * from './roles';
 export * from './shipments';
 export * from './user-vouchers';
-export * from './users';
 export * from './vouchers';

@@ -1,3 +1,4 @@
+import { Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -20,6 +21,7 @@ import {
 import type { WebResponse } from 'src/common/common.interface';
 import { PaginationDto } from 'src/common/common.dto';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('vouchers')
 export class VouchersController {
   constructor(

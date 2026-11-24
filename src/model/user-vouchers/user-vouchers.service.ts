@@ -7,16 +7,14 @@ import {
   FindAllUserVoucherDto as FindAllDto,
   FindByVoucherUserVoucherDto as FindByVoucherDto,
 } from './user-vouchers.interface';
-import { CookieRequest, WebResponse } from 'src/common/common.interface';
+import { WebResponse } from 'src/common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
 import { PaginationDto } from 'src/common/common.dto';
 import { Messages } from 'src/utils/message.helper';
-import { NotFoundException, UnauthorizedException } from 'src/exceptions';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from '../session/session.interface';
-import { UsersService } from '../users/users.service';
+import { NotFoundException } from 'src/exceptions';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import { VouchersService } from '../vouchers/vouchers.service';
 import { UserVoucherStatus } from 'src/generated/prisma/enums';
 
@@ -25,8 +23,7 @@ export class UserVouchersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly logger: PinoLogger,
-    private readonly jwt: JwtService,
-    private readonly user: UsersService,
+
     private readonly voucher: VouchersService,
   ) {
     this.logger.setContext(UserVouchersService.name);
@@ -35,7 +32,6 @@ export class UserVouchersService {
   private name = 'User Voucher';
 
   async create(body: CreateUserVoucherDto): Promise<WebResponse> {
-    await this.user.validateUser(body.userId);
     await this.voucher.validateVoucher(body.voucherId);
     return await this.prisma.userVoucher
       .create({ data: body })
@@ -80,15 +76,8 @@ export class UserVouchersService {
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
-  async findByUser(
-    request: CookieRequest,
-  ): Promise<WebResponse<FindByUserDto>> {
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      throw new UnauthorizedException();
-    const { sub }: JwtPayload = await this.jwt.decode(
-      authHeader.replace('Bearer ', ''),
-    );
+  async findByUser(request: JwtPayload): Promise<WebResponse<FindByUserDto>> {
+    const { sub } = request;
     return await this.prisma.userVoucher
       .findMany({ where: { userId: sub }, include: { vouchers: true } })
       .then((data) => ({ message: Messages.get(this.name), data }));
@@ -100,10 +89,12 @@ export class UserVouchersService {
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
-  async use(id: string): Promise<WebResponse> {
-    await this.validateUserVoucher(id);
+  async use(id: string, actor: JwtPayload): Promise<WebResponse> {
     return await this.prisma.userVoucher
-      .update({ where: { id }, data: { status: UserVoucherStatus.USED } })
+      .update({
+        where: { id, userId: actor.sub },
+        data: { status: UserVoucherStatus.USED },
+      })
       .then(() => ({ message: Messages.update(this.name) }));
   }
 }

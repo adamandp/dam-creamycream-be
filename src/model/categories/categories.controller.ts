@@ -1,3 +1,4 @@
+import { Public, Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -20,6 +21,7 @@ import {
 } from './categories.interface';
 import { WebResponse } from 'src/common/common.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('categories')
 export class CategoriesController {
   constructor(
@@ -34,6 +36,7 @@ export class CategoriesController {
     return this.service.create(body);
   }
 
+  @Public()
   @Get()
   findAll(
     @Query() pagination: PaginationDto,
@@ -41,6 +44,7 @@ export class CategoriesController {
     return this.service.findAll(pagination);
   }
 
+  @Public()
   @Get(':id')
   findById(@Param('id') id: string): Promise<WebResponse<FindByIdDto>> {
     return this.service.findById(id);

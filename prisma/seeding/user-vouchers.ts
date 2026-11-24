@@ -1,9 +1,10 @@
 import { PrismaClient } from 'src/generated/prisma/client';
 
-export async function seedUserVouchers(prisma: PrismaClient) {
-  const users = await prisma.user.findMany({
-    select: { id: true },
-  });
+export async function seedUserVouchers(
+  prisma: PrismaClient,
+  userIds: string[],
+) {
+  const users = userIds.map((id) => ({ id }));
 
   const vouchers = await prisma.voucher.findMany({
     where: {

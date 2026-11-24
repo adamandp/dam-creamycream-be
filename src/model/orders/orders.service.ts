@@ -1,3 +1,4 @@
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -18,8 +19,8 @@ export class OrdersService {
     this.logger.setContext(OrdersService.name);
   }
 
-  async checkout(body: CheckOutDto): Promise<WebResponse> {
-    return this.commandBus.execute(new CheckOutCommand(body));
+  async checkout(body: CheckOutDto, actor: JwtPayload): Promise<WebResponse> {
+    return this.commandBus.execute(new CheckOutCommand(body, actor));
   }
 
   async findAll(pagination: PaginationDto): Promise<WebResponse<FindAllDto>> {

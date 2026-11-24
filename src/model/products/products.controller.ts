@@ -1,3 +1,4 @@
+import { Public, Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -23,6 +24,7 @@ import {
 } from './products.interface';
 import { ProductQueryDto } from './dto/product-query.dto';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -39,6 +41,7 @@ export class ProductsController {
     return this.productsService.findAll(pagination);
   }
 
+  @Public()
   @Get('catalog')
   findCatalog(
     @Query() query: ProductQueryDto,

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CheckoutOrderHandler } from './checkout.handler';
 import {
-  HandleUserOrder,
   HandleAddressOrder,
   HandleProductsOrder,
   HandleCartOrder,
@@ -23,7 +22,6 @@ import {
 @Module({
   providers: [
     CheckoutOrderHandler,
-    HandleUserOrder,
     HandleAddressOrder,
     HandleProductsOrder,
     HandleCartOrder,

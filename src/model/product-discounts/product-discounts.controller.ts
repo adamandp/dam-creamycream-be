@@ -1,3 +1,4 @@
+import { Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -18,6 +19,7 @@ import {
 } from './product-discounts.interface';
 import { WebResponse } from 'src/common/common.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('product-discounts')
 export class ProductDiscountsController {
   constructor(

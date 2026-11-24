@@ -1,3 +1,4 @@
+import { assertImageFile } from 'src/config/multer.config';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
@@ -21,17 +22,21 @@ export class UploadService {
     file: Express.Multer.File,
     name: string,
   ): Promise<UploadApiResponse> {
+    assertImageFile(file);
     return new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ public_id: name }, (error, result) => {
-          if (error || !result) {
-            const message = ErrorMessage.upload(name);
-            this.logger.error(message, error);
-            reject(new BadRequestException(message));
-            return;
-          }
-          resolve(result);
-        })
+        .upload_stream(
+          { public_id: name, resource_type: 'image' },
+          (error, result) => {
+            if (error || !result) {
+              const message = ErrorMessage.upload(name);
+              this.logger.error(message);
+              reject(new BadRequestException(message));
+              return;
+            }
+            resolve(result);
+          },
+        )
         .end(file.buffer);
     });
   }
@@ -41,7 +46,7 @@ export class UploadService {
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
       const message = `❌ Failed to delete image "${publicId}" from Cloudinary.`;
-      this.logger.error(message, error);
+      this.logger.error(message);
       throw new BadRequestException(message);
     }
   }

@@ -1,3 +1,4 @@
+import { Roles } from 'src/decorators/access.decorator';
 import { Controller, Get, Body, Patch, Param, Query } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
@@ -10,6 +11,7 @@ import {
 } from './inventory.interface';
 import { PinoLogger } from 'nestjs-pino';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('inventory')
 export class InventoryController {
   constructor(

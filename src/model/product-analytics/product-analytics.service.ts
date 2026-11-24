@@ -8,32 +8,30 @@ import {
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { CookieRequest, WebResponse } from 'src/common/common.interface';
+import { WebResponse } from 'src/common/common.interface';
 import { Messages } from 'src/utils/message.helper';
 import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException, UnauthorizedException } from 'src/exceptions';
-import { JwtPayload } from '../session/session.interface';
-import { JwtService } from '@nestjs/jwt';
+import { NotFoundException } from 'src/exceptions';
+import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
 @Injectable()
 export class ProductAnalyticsService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
-    private readonly jwt: JwtService,
   ) {
     this.logger.setContext(ProductAnalyticsService.name);
   }
 
   private name = 'Product Analytic';
 
-  async create({
-    productId,
-    userId,
-  }: CreateProductAnalyticDto): Promise<WebResponse> {
+  async create(
+    { productId }: CreateProductAnalyticDto,
+    actor: JwtPayload,
+  ): Promise<WebResponse> {
     return await this.prisma.productAnalytics
       .create({
-        data: { productId: productId ?? 'unkown', userId: userId ?? 'unkown' },
+        data: { productId, userId: actor.sub },
       })
       .then(() => ({ message: Messages.create(this.name) }));
   }
@@ -49,7 +47,7 @@ export class ProductAnalyticsService {
         skip,
         take: limit,
       }),
-      this.prisma.productAnalytics.count(),
+      this.prisma.productAnalytics.count({ where: { productId: id } }),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       return {
@@ -66,15 +64,10 @@ export class ProductAnalyticsService {
   }
 
   async findByUser(
-    request: CookieRequest,
+    request: JwtPayload,
     { limit, page }: PaginationDto,
   ): Promise<WebResponse<FindByUserDto>> {
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      throw new UnauthorizedException();
-    const { sub }: JwtPayload = await this.jwt.decode(
-      authHeader.replace('Bearer ', ''),
-    );
+    const { sub } = request;
     const skip = Math.max((page - 1) * limit, 0);
     return await Promise.all([
       this.prisma.productAnalytics.findMany({
@@ -82,7 +75,7 @@ export class ProductAnalyticsService {
         skip,
         take: limit,
       }),
-      this.prisma.productAnalytics.count(),
+      this.prisma.productAnalytics.count({ where: { userId: sub } }),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       return {

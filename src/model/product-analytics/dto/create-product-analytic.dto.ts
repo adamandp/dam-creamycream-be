@@ -4,8 +4,10 @@ import z from 'zod';
 
 const CreateProductAnalyticsSchema = BaseProductAnalyticsSchema.omit({
   id: true,
+  userId: true,
+  productId: true,
   createdAt: true,
-});
+}).extend({ productId: z.uuid() });
 
 export class CreateProductAnalyticDto
   extends createZodDto(CreateProductAnalyticsSchema)

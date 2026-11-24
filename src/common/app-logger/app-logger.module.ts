@@ -13,7 +13,8 @@ import { Request, Response } from 'express';
 
         return {
           pinoHttp: {
-            level: config.get<string>('LOG_LEVEL') ?? 'trace',
+            level:
+              config.get<string>('LOG_LEVEL') ?? (isDev ? 'debug' : 'info'),
             transport: isDev
               ? {
                   target: 'pino-pretty',
@@ -53,18 +54,29 @@ import { Request, Response } from 'express';
                   ],
                 },
             autoLogging: true,
+            redact: {
+              paths: [
+                'req.headers.authorization',
+                'req.headers.cookie',
+                'res.headers[\"set-cookie\"]',
+                'password',
+                'accessToken',
+                'refreshToken',
+              ],
+              censor: '[REDACTED]',
+            },
             serializers: {
               req(req: Request) {
                 return {
                   method: req.method,
-                  url: req.url,
-                  query: req.query,
-                  params: req.params,
-                  headers: req.headers,
+                  url: req.url?.split('?')[0],
                 };
               },
+              err(err: Error & { statusCode?: number }) {
+                return { type: err.name, statusCode: err.statusCode };
+              },
               res(res: Response) {
-                return res;
+                return { statusCode: res.statusCode };
               },
             },
           },

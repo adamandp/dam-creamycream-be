@@ -1,3 +1,4 @@
+import { Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -20,6 +21,7 @@ import {
 } from './notifications.interface';
 import { WebResponse } from 'src/common/common.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('notifications')
 export class NotificationsController {
   constructor(

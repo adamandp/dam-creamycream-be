@@ -1,3 +1,6 @@
+import { Roles } from 'src/decorators/access.decorator';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -5,13 +8,12 @@ import {
   Body,
   Param,
   ParseUUIDPipe,
-  Request,
   Query,
 } from '@nestjs/common';
 import { ProductAnalyticsService } from './product-analytics.service';
 import { CreateProductAnalyticDto } from './dto/create-product-analytic.dto';
 import { PinoLogger } from 'nestjs-pino';
-import type { CookieRequest, WebResponse } from 'src/common/common.interface';
+import type { WebResponse } from 'src/common/common.interface';
 import {
   FindByProductProductAnalyticsDto as FindByProductDto,
   FindByUserProductAnalyticsDto as FindByUserDto,
@@ -19,6 +21,7 @@ import {
 } from './product-analytics.interface';
 import { PaginationDto } from 'src/common/common.dto';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('product-analytics')
 export class ProductAnalyticsController {
   constructor(
@@ -28,9 +31,13 @@ export class ProductAnalyticsController {
     this.loger.setContext(ProductAnalyticsController.name);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Post()
-  create(@Body() body: CreateProductAnalyticDto): Promise<WebResponse> {
-    return this.service.create(body);
+  create(
+    @CurrentUser() actor: JwtPayload,
+    @Body() body: CreateProductAnalyticDto,
+  ): Promise<WebResponse> {
+    return this.service.create(body, actor);
   }
 
   @Get('product/:id')
@@ -41,9 +48,10 @@ export class ProductAnalyticsController {
     return this.service.findByProduct(id, { limit, page });
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Get('user')
   async findByUser(
-    @Request() request: CookieRequest,
+    @CurrentUser() request: JwtPayload,
     @Query() { limit, page }: PaginationDto,
   ): Promise<WebResponse<FindByUserDto>> {
     return this.service.findByUser(request, { limit, page });

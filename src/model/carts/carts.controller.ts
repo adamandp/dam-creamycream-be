@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Query, Request } from '@nestjs/common';
+import { Roles } from 'src/decorators/access.decorator';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { PaginationDto } from 'src/common/common.dto';
@@ -6,8 +7,9 @@ import { WebResponse } from 'src/common/common.interface';
 import { FindByUserCartDto as FindByUserDto } from './carts.interface';
 import { PinoLogger } from 'nestjs-pino';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from '../session/session.interface';
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('carts')
 export class CartsController {
   constructor(
@@ -17,6 +19,7 @@ export class CartsController {
     this.logger.setContext(CartsController.name);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Post('/user/add')
   async addToCart(
     @CurrentUser() payload: JwtPayload,
@@ -25,6 +28,7 @@ export class CartsController {
     return this.cartsService.addToCart(payload.sub, body);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Post('/user/remove')
   async removeFromCart(
     @CurrentUser() payload: JwtPayload,
@@ -33,6 +37,7 @@ export class CartsController {
     return this.cartsService.removeFromCart(payload.sub, body);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Get('/user')
   findByUser(
     @CurrentUser() payload: JwtPayload,

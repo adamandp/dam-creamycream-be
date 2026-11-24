@@ -1,3 +1,9 @@
+import { Roles } from 'src/decorators/access.decorator';
+import { AccountsClient } from 'src/integrations/accounts/accounts.client';
+import { Req } from '@nestjs/common';
+import type { Request as ExpressRequest } from 'express';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -6,13 +12,12 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  Request,
   Patch,
 } from '@nestjs/common';
 import { UserVouchersService } from './user-vouchers.service';
 import { CreateUserVoucherDto } from './dto/create-user-voucher.dto';
 import { PaginationDto } from 'src/common/common.dto';
-import type { CookieRequest, WebResponse } from 'src/common/common.interface';
+import type { WebResponse } from 'src/common/common.interface';
 import { PinoLogger } from 'nestjs-pino';
 import {
   FindByUserUserVoucherDto as FindByUserDto,
@@ -21,23 +26,33 @@ import {
   FindByVoucherUserVoucherDto as FindByVoucherDto,
 } from './user-vouchers.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('user-vouchers')
 export class UserVouchersController {
   constructor(
     private readonly service: UserVouchersService,
     private readonly logger: PinoLogger,
+    private readonly accounts: AccountsClient,
   ) {
     this.logger.setContext(UserVouchersController.name);
   }
 
   @Post()
-  create(@Body() body: CreateUserVoucherDto): Promise<WebResponse> {
+  async create(
+    @Req() req: ExpressRequest,
+    @Body() body: CreateUserVoucherDto,
+  ): Promise<WebResponse> {
+    await this.accounts.validateTarget(body.userId, req.headers.authorization!);
     return this.service.create(body);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
   @Patch(':id')
-  use(@Param('id', ParseUUIDPipe) id: string): Promise<WebResponse> {
-    return this.service.use(id);
+  use(
+    @CurrentUser() actor: JwtPayload,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<WebResponse> {
+    return this.service.use(id, actor);
   }
 
   @Get()
@@ -47,18 +62,19 @@ export class UserVouchersController {
     return this.service.findAll(pagination);
   }
 
+  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Get('/user')
+  findByUser(
+    @CurrentUser() request: JwtPayload,
+  ): Promise<WebResponse<FindByUserDto>> {
+    return this.service.findByUser(request);
+  }
+
   @Get(':id')
   findById(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<WebResponse<FindByIdDto>> {
     return this.service.findById(id);
-  }
-
-  @Get('/user')
-  findByUser(
-    @Request() request: CookieRequest,
-  ): Promise<WebResponse<FindByUserDto>> {
-    return this.service.findByUser(request);
   }
 
   @Get('/voucher/:id')

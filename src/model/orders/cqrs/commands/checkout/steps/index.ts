@@ -12,6 +12,5 @@ export * from './handle-payment';
 export * from './handle-product-discounts';
 export * from './handle-products';
 export * from './handle-shipment';
-export * from './handle-user-voucher';
-export * from './handle-user';
 export * from './handle-vouchers';
+export * from './handle-user-voucher';

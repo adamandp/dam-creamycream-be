@@ -47,13 +47,16 @@ const paymentMethods = [
   'neo_bank',
 ];
 
-export async function seedOrders(prisma: PrismaClient) {
-  const users = await prisma.user.findMany({
-    include: {
-      addresses: true,
-      userVouchers: true,
-    },
-  });
+export async function seedOrders(prisma: PrismaClient, userIds: string[]) {
+  const users = await Promise.all(
+    userIds.map(async (id) => ({
+      id,
+      addresses: await prisma.address.findMany({ where: { userId: id } }),
+      userVouchers: await prisma.userVoucher.findMany({
+        where: { userId: id },
+      }),
+    })),
+  );
 
   const products = await prisma.product.findMany({
     include: {

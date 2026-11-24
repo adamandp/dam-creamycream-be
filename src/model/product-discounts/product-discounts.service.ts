@@ -53,7 +53,7 @@ export class ProductDiscountsService {
         skip,
         take: limit,
       }),
-      this.prisma.user.count(),
+      this.prisma.productDiscount.count(),
     ]).then(([data, total]) => {
       if (total <= 0) throw new NotFoundException(this.name);
       return {

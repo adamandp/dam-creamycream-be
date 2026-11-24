@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AccountsModule } from './integrations/accounts/accounts.module';
 import { CommonModule } from './common/common.module';
-import { RolesModule } from './model/roles/roles.module';
-import { UsersModule } from './model/users/users.module';
-import { SessionModule } from './model/session/session.module';
 import { AddressesModule } from './model/addresses/addresses.module';
 import { NotificationsModule } from './model/notifications/notifications.module';
 import { UserNotificationsModule } from './model/user-notifications/user-notifications.module';
@@ -20,16 +18,13 @@ import { ReviewsModule } from './model/reviews/reviews.module';
 import { ShipmentsModule } from './model/shipments/shipments.module';
 import { OrdersModule } from './model/orders/orders.module';
 import { PaymentsModule } from './model/payments/payments.module';
-import { AuthModule } from './model/auth/auth.module';
 import { RecommendationsModule } from './model/recommendations/recommendations.module';
 import { ProductModule } from './model/product/product.module';
 
 @Module({
   imports: [
     CommonModule,
-    RolesModule,
-    UsersModule,
-    SessionModule,
+    AccountsModule,
     AddressesModule,
     NotificationsModule,
     UserNotificationsModule,
@@ -47,7 +42,6 @@ import { ProductModule } from './model/product/product.module';
     ShipmentsModule,
     OrdersModule,
     PaymentsModule,
-    AuthModule,
     RecommendationsModule,
     ProductModule,
   ],

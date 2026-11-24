@@ -7,7 +7,6 @@ import { WebResponse } from 'src/common/common.interface';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CheckOutCommand } from './checkout.command';
 import {
-  HandleUserOrder,
   HandleAddressOrder,
   HandleProductsOrder,
   HandleCartOrder,
@@ -32,7 +31,6 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
   constructor(
     private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
-    private readonly handleUser: HandleUserOrder,
     private readonly handleAddress: HandleAddressOrder,
     private readonly handleProducts: HandleProductsOrder,
     private readonly handleCart: HandleCartOrder,
@@ -57,13 +55,13 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
 
   async execute(command: CheckOutCommand): Promise<WebResponse> {
     const { order, orderItems, payment, shipment } = command.payload;
-    const { userId } = order;
+    const userId = command.actor.sub;
+    order.userId = userId;
     const { cost, ...shipmentInput } = shipment;
 
     await this.prisma.$transaction(
       async (tx) => {
         // validation
-        await this.handleUser.validate(tx, userId);
         await this.handleAddress.validate(tx, order);
         const products = await this.handleProducts.validate(tx, orderItems);
         const cartId = await this.handleCart.validate(tx, userId);

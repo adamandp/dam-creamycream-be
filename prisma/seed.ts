@@ -1,10 +1,8 @@
 import 'dotenv/config';
-import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../src/generated/prisma/client';
+import { z } from 'zod';
 import {
-  seedRoles,
-  seedUsers,
   seedAddresses,
   seedProducts,
   seedCategories,
@@ -21,79 +19,69 @@ import {
 } from './seeding';
 import { seedProductInformations } from './seeding/product-informations';
 
-const connectionString = `${process.env.DATABASE_URL}`;
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
-
-async function deleteData() {
-  // orders section
-  await prisma.review.deleteMany();
-  await prisma.payment.deleteMany();
-  await prisma.shipment.deleteMany();
-  await prisma.orderItem.deleteMany();
-  await prisma.order.deleteMany();
-
-  // promo section
-  await prisma.userVoucher.deleteMany();
-  await prisma.productDiscount.deleteMany();
-  await prisma.voucher.deleteMany();
-  await prisma.discount.deleteMany();
-
-  // products section
-  await prisma.cartItem.deleteMany();
-  await prisma.inventory.deleteMany();
-  await prisma.product.deleteMany();
-  await prisma.category.deleteMany();
-  await prisma.productInformation.deleteMany();
-
-  // users section
-  await prisma.userToken.deleteMany();
-  await prisma.address.deleteMany();
-  await prisma.cart.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.role.deleteMany();
-
-  console.log('Deleting existing data done');
-}
-
 async function main() {
-  await deleteData();
-
-  // users section
-
-  await seedRoles(prisma);
-  await seedUsers(prisma);
-  await seedAddresses(prisma);
-
-  // products section
-  await seedCategories(prisma);
-  await seedProducts(prisma);
-  await seedProductInformations(prisma);
-  await seedCartItems(prisma);
-
-  // promo section
-  await seedVouchers(prisma);
-  await seedDiscounts(prisma);
-  await seedProductDiscount(prisma);
-  await seedUserVouchers(prisma);
-
-  // orders section
-  const checkoutData = await seedOrders(prisma);
-  await seedOrderItems(prisma, checkoutData);
-  await seedShipments(prisma, checkoutData);
-  await seedPayments(prisma, checkoutData);
-  await seedReviews(prisma);
-}
-
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-    await pool.end();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    await pool.end();
-    process.exit(1);
+  if (
+    !['development', 'test'].includes(process.env.NODE_ENV ?? '') ||
+    process.env.SEED_CONFIRM !== 'LOCAL_EMPTY_DB'
+  )
+    throw new Error('Fixture seed requires explicit local-only configuration');
+  const url = new URL(process.env.SEED_DATABASE_URL ?? '');
+  if (
+    !['postgresql:', 'postgres:'].includes(url.protocol) ||
+    !['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) ||
+    !/(?:_test|_dev)$/.test(url.pathname)
+  )
+    throw new Error('Seed requires a local _test or _dev database');
+  const userIds = z
+    .array(z.uuid())
+    .min(1)
+    .parse(
+      (process.env.SEED_USER_IDS ?? '')
+        .split(',')
+        .map((v) => v.trim())
+        .filter(Boolean),
+    );
+  if (new Set(userIds).size !== userIds.length)
+    throw new Error('Duplicate fixture UUIDs');
+  const prisma = new PrismaClient({
+    adapter: new PrismaPg({ connectionString: url.href }),
   });
+  try {
+    const counts = await Promise.all([
+      prisma.category.count(),
+      prisma.product.count(),
+      prisma.cart.count(),
+      prisma.address.count(),
+      prisma.order.count(),
+      prisma.voucher.count(),
+      prisma.discount.count(),
+      prisma.review.count(),
+      prisma.notification.count(),
+    ]);
+    if (counts.some((count) => count !== 0))
+      throw new Error('Fixture seeding refuses a nonempty database');
+    await prisma.cart.createMany({
+      data: userIds.map((userId) => ({ userId })),
+    });
+    await seedAddresses(prisma, userIds);
+    await seedCategories(prisma);
+    await seedProducts(prisma);
+    await seedProductInformations(prisma);
+    await seedCartItems(prisma);
+    await seedVouchers(prisma);
+    await seedDiscounts(prisma);
+    await seedProductDiscount(prisma);
+    await seedUserVouchers(prisma, userIds);
+    const orders = await seedOrders(prisma, userIds);
+    await seedOrderItems(prisma, orders);
+    await seedShipments(prisma, orders);
+    await seedPayments(prisma, orders);
+    await seedReviews(prisma);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+main().catch(() => {
+  console.error('Fixture seed failed; verify isolated database configuration.');
+  process.exitCode = 1;
+});

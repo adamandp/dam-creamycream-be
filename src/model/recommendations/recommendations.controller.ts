@@ -1,3 +1,4 @@
+import { Public, Roles } from 'src/decorators/access.decorator';
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { RecommendationsService } from './recommendations.service';
 import { PinoLogger } from 'nestjs-pino';
@@ -7,6 +8,7 @@ import {
   ProductRecomendationRes,
 } from './recommendations.interface';
 
+@Roles('ADMIN', 'SUPER_ADMIN')
 @Controller('recommendations')
 export class RecommendationsController {
   constructor(
@@ -16,21 +18,25 @@ export class RecommendationsController {
     this.logger.setContext(RecommendationsController.name);
   }
 
+  @Public()
   @Get('classic')
   async getClassic(): Promise<WebResponse<ProductRecomendationRes[]>> {
     return this.recommendationsService.getClassicRecommendations();
   }
 
+  @Public()
   @Get('categories')
   async getCategories(): Promise<WebResponse<CategoriesRecomendationRes[]>> {
     return this.recommendationsService.getCategoriesRecommendations();
   }
 
+  @Public()
   @Get('offers')
   async getOffers(): Promise<WebResponse<ProductRecomendationRes[]>> {
     return this.recommendationsService.getOfferRecommendations();
   }
 
+  @Public()
   @Get('related/:id')
   async getRelated(
     @Param('id', ParseUUIDPipe) id: string,
