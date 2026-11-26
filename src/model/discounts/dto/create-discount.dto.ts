@@ -4,6 +4,7 @@ import { createZodDto } from 'nestjs-zod';
 
 export const CreateDiscountSchema = BaseDiscountSchema.omit({
   id: true,
+  redeemedCount: true,
   createdAt: true,
   updatedAt: true,
 });

@@ -8,7 +8,7 @@ import {
   ProductRecomendationRes,
 } from './recommendations.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('recommendations')
 export class RecommendationsController {
   constructor(

@@ -13,60 +13,10 @@ datasource db {
   provider = "postgresql"
 }
 
-// Retained only for staged identity migration/rollback; not accessible through Prisma Client.
-model Role {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique @db.VarChar(50)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  users User[]
-
-  @@map("roles")
-  @@ignore
-}
-
-model User {
-  id          String      @id @default(uuid()) @db.Uuid
-  roleId      String      @map("role_id") @db.Uuid
-  username    String      @unique @db.VarChar(50)
-  email       String?     @unique @db.VarChar(255)
-  phoneNumber String?     @unique @map("phone_number") @db.VarChar(100)
-  password    String      @db.VarChar(255)
-  fullName    String      @map("full_name") @db.VarChar(100)
-  birthDate   DateTime?   @map("birth_date") @db.Date
-  imageUrl    String?     @map("image_url") @db.VarChar(255)
-  gender      GenderType? @map("gender")
-  isActive    Boolean     @default(false) @map("is_active") @db.Boolean
-  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt   DateTime    @updatedAt @map("updated_at")
-
-  roles Role @relation(fields: [roleId], references: [id])
-
-  userTokens UserToken[]
-
-  @@map("users")
-  @@ignore
-}
-
-model UserToken {
-  id          String   @id @default(uuid()) @db.Uuid
-  userId      String   @map("user_id") @db.Uuid
-  token       String   @unique @db.VarChar(255)
-  browserInfo String   @db.Text
-  expiredAt   DateTime
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  users User @relation(fields: [userId], references: [id])
-
-  @@map("user_tokens")
-  @@ignore
-}
-
 model Address {
   id                   String   @id @default(uuid()) @db.Uuid
   userId               String   @map("user_id") @db.Uuid
+  destinationId        Int?     @map("destination_id")
   recipientName        String   @map("recipient_name") @db.VarChar(100)
   recipientPhoneNumber String   @map("recipient_phone_number") @db.VarChar(100)
   province             String   @db.VarChar(100)
@@ -92,6 +42,7 @@ model Product {
   name        String   @db.VarChar(100)
   imageUrl    String?  @map("image_url") @db.VarChar(255)
   description String?  @db.VarChar(255)
+  weightGrams Int?     @map("weight_grams")
   price       Float
   isActive    Boolean  @map("is_active") @db.Boolean
   createdAt   DateTime @default(now()) @map("created_at")
@@ -164,16 +115,19 @@ model CartItem {
 }
 
 model Order {
-  id             String      @id @default(uuid()) @db.Uuid
-  userId         String      @map("user_id") @db.Uuid
-  addressId      String      @map("address_id") @db.Uuid
-  voucherAmount  Float       @default(0) @map("voucher_amount")
-  discountAmount Float       @default(0) @map("discount_amount")
-  totalPrice     Float       @map("total_price")
-  finalPrice     Float       @map("final_price")
-  status         OrderStatus @default(PENDING)
-  createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime    @updatedAt @map("updated_at")
+  id              String      @id @default(uuid()) @db.Uuid
+  userId          String      @map("user_id") @db.Uuid
+  addressId       String      @map("address_id") @db.Uuid
+  addressSnapshot Json?       @map("address_snapshot")
+  checkoutKey     String?     @map("checkout_key") @db.Uuid
+  checkoutHash    String?     @map("checkout_hash") @db.VarChar(64)
+  voucherAmount   Float       @default(0) @map("voucher_amount")
+  discountAmount  Float       @default(0) @map("discount_amount")
+  totalPrice      Float       @map("total_price")
+  finalPrice      Float       @map("final_price")
+  status          OrderStatus @default(PENDING)
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
 
   addresses Address @relation(fields: [addressId], references: [id])
 
@@ -182,6 +136,8 @@ model Order {
   payments   Payment[]
   shipments  Shipment[]
 
+  @@unique([userId, checkoutKey])
+  @@index([userId, status])
   @@index([userId])
   @@map("orders")
 }
@@ -216,21 +172,30 @@ model OrderItem {
 }
 
 model Payment {
-  id              String        @id @default(uuid()) @db.Uuid
-  orderId         String        @map("order_id") @db.Uuid
-  method          String        @db.VarChar(50)
-  methodType      String        @map("method_type") @db.VarChar(50)
-  amount          Float
-  status          PaymentStatus @default(PENDING)
-  transactionCode String?       @map("transaction_code") @db.VarChar(255)
-  transactionId   String?       @unique @map("transaction_id") @db.VarChar(255)
-  expiryDate      DateTime?     @map("expiry_date")
-  paidAt          DateTime?     @map("paid_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
-  createdAt       DateTime      @default(now()) @map("created_at")
+  id                      String        @id @default(uuid()) @db.Uuid
+  orderId                 String        @map("order_id") @db.Uuid
+  method                  String        @db.VarChar(50)
+  methodType              String        @map("method_type") @db.VarChar(50)
+  amount                  Float
+  status                  PaymentStatus @default(PENDING)
+  initializationStartedAt DateTime?     @map("initialization_started_at")
+  cancelRequestedAt       DateTime?     @map("cancel_requested_at")
+  nextCheckAt             DateTime?     @map("next_check_at")
+  externalPaymentId       String?       @unique @map("external_payment_id") @db.Uuid
+  paymentRequestHash      String?       @map("payment_request_hash") @db.VarChar(64)
+  providerStatus          String?       @map("provider_status") @db.VarChar(50)
+  providerUpdatedAt       DateTime?     @map("provider_updated_at")
+  transactionCode         String?       @map("transaction_code") @db.VarChar(255)
+  transactionId           String?       @unique @map("transaction_id") @db.VarChar(255)
+  expiryDate              DateTime?     @map("expiry_date")
+  paidAt                  DateTime?     @map("paid_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+  createdAt               DateTime      @default(now()) @map("created_at")
 
   orders Order @relation(fields: [orderId], references: [id])
 
+  @@unique([orderId])
+  @@index([status, nextCheckAt])
   @@map("payments")
 }
 
@@ -359,6 +324,7 @@ model UserVoucher {
 
   vouchers Voucher @relation(fields: [voucherId], references: [id])
 
+  @@unique([userId, voucherId])
   @@index([userId])
   @@map("user_vouchers")
 }
@@ -458,12 +424,4 @@ enum UserVoucherStatus {
   CLAIMED
 
   @@map("USER_VOUCHER_STATUS")
-}
-
-enum GenderType {
-  MALE
-  FEMALE
-  OTHER
-
-  @@map("GENDER_TYPE")
 }

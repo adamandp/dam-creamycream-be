@@ -9,7 +9,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('carts')
 export class CartsController {
   constructor(
@@ -19,7 +19,7 @@ export class CartsController {
     this.logger.setContext(CartsController.name);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post('/user/add')
   async addToCart(
     @CurrentUser() payload: JwtPayload,
@@ -28,7 +28,7 @@ export class CartsController {
     return this.cartsService.addToCart(payload.sub, body);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post('/user/remove')
   async removeFromCart(
     @CurrentUser() payload: JwtPayload,
@@ -37,7 +37,7 @@ export class CartsController {
     return this.cartsService.removeFromCart(payload.sub, body);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('/user')
   findByUser(
     @CurrentUser() payload: JwtPayload,

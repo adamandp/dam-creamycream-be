@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ProductDiscountsService } from './product-discounts.service';
 import { CreateProductDiscountDto } from './dto/create-product-discount.dto';
@@ -19,7 +20,7 @@ import {
 } from './product-discounts.interface';
 import { WebResponse } from 'src/common/common.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('product-discounts')
 export class ProductDiscountsController {
   constructor(
@@ -42,7 +43,9 @@ export class ProductDiscountsController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: string): Promise<WebResponse<FindByIdDto>> {
+  findById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<WebResponse<FindByIdDto>> {
     return this.service.findById(id);
   }
 
@@ -54,7 +57,7 @@ export class ProductDiscountsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<WebResponse> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<WebResponse> {
     return this.service.remove(id);
   }
 }

@@ -137,8 +137,13 @@ export class CartsService {
                   },
                   productDiscounts: {
                     select: {
+                      isActive: true,
                       discounts: {
                         select: {
+                          id: true,
+                          maxApplied: true,
+                          maxRedeemed: true,
+                          redeemedCount: true,
                           discountType: true,
                           value: true,
                           startDate: true,
@@ -182,21 +187,44 @@ export class CartsService {
       const discount = product.productDiscounts?.discounts;
 
       let discountPrice: number | null = null;
+      let discountId: string | null = null;
 
       if (
         discount &&
-        discount.value !== null &&
+        product.productDiscounts?.isActive &&
+        item.quantity <= discount.maxApplied &&
+        discount.redeemedCount + item.quantity <= discount.maxRedeemed &&
+        (discount.value !== null || discount.discountType === 'FREE_ITEM') &&
         discount.startDate <= now &&
         discount.endDate >= now
       ) {
+        discountId = discount.id;
         switch (discount.discountType) {
           case 'PERCENTAGE':
-            discountPrice =
-              product.price - (product.price * discount.value) / 100;
+            discountPrice = Math.max(
+              0,
+              Math.round(
+                product.price - (product.price * (discount.value ?? 0)) / 100,
+              ),
+            );
             break;
 
+          case 'PRICE':
+            discountPrice = Math.max(
+              0,
+              Math.round(
+                Math.min(product.price, discount.value ?? product.price),
+              ),
+            );
+            break;
+          case 'FREE_ITEM':
+            discountPrice = null;
+            break;
           default:
-            discountPrice = Math.max(product.price - discount.value, 0);
+            discountPrice = Math.max(
+              0,
+              Math.round(product.price - (discount.value ?? 0)),
+            );
         }
       }
 
@@ -207,6 +235,7 @@ export class CartsService {
         category: product.categories.name,
         price: product.price,
         discountPrice,
+        discountId,
         qty: item.quantity,
       };
     });

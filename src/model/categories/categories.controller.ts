@@ -21,7 +21,7 @@ import {
 } from './categories.interface';
 import { WebResponse } from 'src/common/common.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('categories')
 export class CategoriesController {
   constructor(
@@ -46,7 +46,9 @@ export class CategoriesController {
 
   @Public()
   @Get(':id')
-  findById(@Param('id') id: string): Promise<WebResponse<FindByIdDto>> {
+  findById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<WebResponse<FindByIdDto>> {
     return this.service.findById(id);
   }
 
@@ -59,7 +61,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<WebResponse> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<WebResponse> {
     return this.service.remove(id);
   }
 }

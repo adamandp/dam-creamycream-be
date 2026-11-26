@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Permissions, Roles } from 'src/decorators/access.decorator';
 import { AccountsClient } from 'src/integrations/accounts/accounts.client';
 import { Req } from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
@@ -12,7 +12,6 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  Patch,
 } from '@nestjs/common';
 import { UserVouchersService } from './user-vouchers.service';
 import { CreateUserVoucherDto } from './dto/create-user-voucher.dto';
@@ -26,7 +25,7 @@ import {
   FindByVoucherUserVoucherDto as FindByVoucherDto,
 } from './user-vouchers.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('user-vouchers')
 export class UserVouchersController {
   constructor(
@@ -37,6 +36,7 @@ export class UserVouchersController {
     this.logger.setContext(UserVouchersController.name);
   }
 
+  @Permissions('user.read')
   @Post()
   async create(
     @Req() req: ExpressRequest,
@@ -46,15 +46,6 @@ export class UserVouchersController {
     return this.service.create(body);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
-  @Patch(':id')
-  use(
-    @CurrentUser() actor: JwtPayload,
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<WebResponse> {
-    return this.service.use(id, actor);
-  }
-
   @Get()
   findAll(
     @Query() pagination: PaginationDto,
@@ -62,7 +53,7 @@ export class UserVouchersController {
     return this.service.findAll(pagination);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('/user')
   findByUser(
     @CurrentUser() request: JwtPayload,

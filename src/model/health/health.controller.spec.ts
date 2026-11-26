@@ -8,8 +8,17 @@ describe('HealthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
-      providers: [HealthService],
-    }).compile();
+      providers: [{ provide: HealthService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
     controller = module.get<HealthController>(HealthController);
   });

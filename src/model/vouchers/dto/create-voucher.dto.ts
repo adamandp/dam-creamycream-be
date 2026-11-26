@@ -4,6 +4,7 @@ import { createZodDto } from 'nestjs-zod';
 
 export const CreateVoucherSchema = BaseVoucherSchema.omit({
   id: true,
+  redeemedCount: true,
   createdAt: true,
   updatedAt: true,
 });

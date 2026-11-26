@@ -16,9 +16,9 @@ export const baseBoolean = (field: string) =>
   });
 
 export const baseDate = (field: string) =>
-  z.coerce.date({
-    error: `📅 ${field} must be a valid date. Time travel not allowed! ⏳ {Invalid Date}`,
-  });
+  z.union([z.iso.datetime({ offset: true }), z.iso.date()], {
+    error: `${field} must be an ISO date or datetime`,
+  }).transform((value) => new Date(value));
 
 export const baseEnum = <T extends readonly [string, ...string[]]>(
   field: string,

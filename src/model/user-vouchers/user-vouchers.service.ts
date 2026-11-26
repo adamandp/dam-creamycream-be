@@ -16,7 +16,6 @@ import { Messages } from 'src/utils/message.helper';
 import { NotFoundException } from 'src/exceptions';
 import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import { VouchersService } from '../vouchers/vouchers.service';
-import { UserVoucherStatus } from 'src/generated/prisma/enums';
 
 @Injectable()
 export class UserVouchersService {
@@ -89,12 +88,4 @@ export class UserVouchersService {
       .then((data) => ({ message: Messages.get(this.name), data }));
   }
 
-  async use(id: string, actor: JwtPayload): Promise<WebResponse> {
-    return await this.prisma.userVoucher
-      .update({
-        where: { id, userId: actor.sub },
-        data: { status: UserVoucherStatus.USED },
-      })
-      .then(() => ({ message: Messages.update(this.name) }));
-  }
 }

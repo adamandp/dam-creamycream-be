@@ -24,7 +24,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('addresses')
 export class AddressesController {
   constructor(
@@ -34,7 +34,7 @@ export class AddressesController {
     this.logger.setContext(AddressesController.name);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post()
   create(
     @CurrentUser() actor: JwtPayload,
@@ -50,7 +50,7 @@ export class AddressesController {
     return this.addressesService.findAll(pagination);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('user')
   findByUserId(
     @CurrentUser() request: JwtPayload,
@@ -58,7 +58,7 @@ export class AddressesController {
     return this.addressesService.findByUser(request);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get(':id')
   findById(
     @CurrentUser() actor: JwtPayload,
@@ -67,7 +67,7 @@ export class AddressesController {
     return this.addressesService.findById(id, actor);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Patch(':id')
   update(
     @CurrentUser() actor: JwtPayload,
@@ -77,7 +77,7 @@ export class AddressesController {
     return this.addressesService.update(id, updateAddressDto, actor);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Delete(':id')
   remove(
     @CurrentUser() actor: JwtPayload,

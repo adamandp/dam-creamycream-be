@@ -25,7 +25,7 @@ export async function seedUserVouchers(
       userId: user.id,
       voucherId: voucher.id,
       claimedAt: new Date(),
-      expiredAt: new Date(),
+      expiredAt: voucher.endDate,
     }));
   });
 

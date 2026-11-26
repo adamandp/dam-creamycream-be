@@ -21,7 +21,7 @@ import {
 } from './notifications.interface';
 import { WebResponse } from 'src/common/common.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('notifications')
 export class NotificationsController {
   constructor(
@@ -59,7 +59,7 @@ export class NotificationsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<WebResponse> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<WebResponse> {
     return this.service.remove(id);
   }
 }

@@ -8,8 +8,17 @@ describe('DiscountsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DiscountsController],
-      providers: [DiscountsService],
-    }).compile();
+      providers: [{ provide: DiscountsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
     controller = module.get<DiscountsController>(DiscountsController);
   });

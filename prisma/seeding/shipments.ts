@@ -1,9 +1,13 @@
 import { PrismaClient } from 'src/generated/prisma/client';
-import { CheckOutDto } from 'src/model/orders/dto/checkout.dto';
+import {
+  CheckOutDto,
+  ShipmentInputDto,
+} from 'src/model/orders/dto/checkout.dto';
 
 export async function seedShipments(
   prisma: PrismaClient,
   checkoutData: (CheckOutDto & {
+    shipment: ShipmentInputDto;
     order: CheckOutDto['order'] & {
       id: string;
     };

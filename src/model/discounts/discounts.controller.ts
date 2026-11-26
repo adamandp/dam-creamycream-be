@@ -21,7 +21,7 @@ import {
 } from './discounts.interface';
 import { WebResponse } from 'src/common/common.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('discounts')
 export class DiscountsController {
   constructor(

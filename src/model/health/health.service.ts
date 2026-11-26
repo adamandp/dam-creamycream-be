@@ -5,7 +5,7 @@ import {
   HttpHealthIndicator,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
-// import { PrismaService } from 'src/common/prisma.module';
+import { RedisService } from 'src/common/redis/redis.service';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
@@ -15,11 +15,16 @@ export class HealthService {
     private http: HttpHealthIndicator,
     private prismaHealth: PrismaHealthIndicator,
     private prisma: PrismaService,
+    private redis: RedisService,
   ) {}
 
   healthCheck(): Promise<HealthCheckResult> {
     return this.health.check([
-      () => this.http.pingCheck('google', 'https://google.com'),
+      async () => ({ application: { status: 'up' } }),
+      () => this.prismaHealth.pingCheck('db', this.prisma),
+      async () => ({
+        redis: { status: (await this.redis.ping()) === 'PONG' ? 'up' : 'down' },
+      }),
     ]);
   }
 

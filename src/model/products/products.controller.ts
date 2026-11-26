@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -24,7 +25,7 @@ import {
 } from './products.interface';
 import { ProductQueryDto } from './dto/product-query.dto';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -51,7 +52,7 @@ export class ProductsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ): Promise<WebResponse> {
     return this.productsService.update(id, updateProductDto);
@@ -60,14 +61,14 @@ export class ProductsController {
   @Patch(':id/image')
   @UseInterceptors(FileInterceptor('file', multerOptions))
   updateImage(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<WebResponse> {
     return this.productsService.updateImage(id, file);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<WebResponse> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<WebResponse> {
     return this.productsService.remove(id);
   }
 }

@@ -12,7 +12,7 @@ export const BaseCartItemSchema = z.object({
   id: baseUUID('Cart Item ID'),
   cartId: baseUUID('Cart ID'),
   productId: baseUUID('Product ID'),
-  quantity: NumberMinMax('Quantity', 1, 100),
+  quantity: NumberMinMax('Quantity', 1, 100).int(),
   createdAt: baseDate('Created At'),
   updatedAt: baseDate('Updated At'),
 });

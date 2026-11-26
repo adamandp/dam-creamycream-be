@@ -1,5 +1,9 @@
 import { OrderStatus, PrismaClient } from 'src/generated/prisma/client';
-import { CheckOutDto } from 'src/model/orders/dto/checkout.dto';
+import {
+  CheckOutDto,
+  ShipmentInputDto,
+  PaymentInputDto,
+} from 'src/model/orders/dto/checkout.dto';
 
 const couriers = [
   'jne',
@@ -64,7 +68,11 @@ export async function seedOrders(prisma: PrismaClient, userIds: string[]) {
     },
   });
 
-  const checkoutData: CheckOutDto[] = users.map((user) => ({
+  const checkoutData: (CheckOutDto & {
+    order: { userId: string };
+    shipment: ShipmentInputDto;
+    payment: PaymentInputDto;
+  })[] = users.map((user) => ({
     order: {
       userId: user.id,
       addressId: user.addresses[Math.floor(Math.random() * 2)].id,

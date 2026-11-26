@@ -8,8 +8,17 @@ describe('PaymentsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PaymentsController],
-      providers: [PaymentsService],
-    }).compile();
+      providers: [{ provide: PaymentsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
     controller = module.get<PaymentsController>(PaymentsController);
   });

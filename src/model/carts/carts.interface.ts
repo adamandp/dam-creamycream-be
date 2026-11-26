@@ -6,4 +6,5 @@ export interface FindByUserCartDto {
   price: number;
   discountPrice: number | null;
   qty: number;
+  discountId?: string | null;
 }

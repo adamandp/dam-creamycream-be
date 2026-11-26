@@ -8,8 +8,17 @@ describe('NotificationsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [NotificationsController],
-      providers: [NotificationsService],
-    }).compile();
+      providers: [{ provide: NotificationsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
     controller = module.get<NotificationsController>(NotificationsController);
   });

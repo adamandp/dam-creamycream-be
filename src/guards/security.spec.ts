@@ -25,8 +25,7 @@ const config = {
   issuer: 'https://issuer.example.test',
   audience: 'accounts-test',
   roles: {
-    SUPER_ADMIN: 'ROOT_CODE',
-    ADMIN: 'ADMIN_CODE',
+    STORE_ADMIN: 'ADMIN_CODE',
     CUSTOMER: 'USER_CODE',
   },
 };
@@ -37,10 +36,10 @@ class SecurityController {
   @Public() @Get('public') open() {
     return { public: true };
   }
-  @Roles('ADMIN') @Get('admin') admin() {
+  @Roles('STORE_ADMIN') @Get('admin') admin() {
     return { admin: true };
   }
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER') @Get('me') me(
+  @Roles('STORE_ADMIN', 'CUSTOMER') @Get('me') me(
     @CurrentUser() actor: JwtPayload,
   ) {
     return { id: actor.sub };
@@ -177,8 +176,8 @@ describe('Accounts JWT and authorization (isolated HTTP)', () => {
   it('accepts configured exact admin role code', async () => {
     await get('admin', token({ role: 'ADMIN_CODE' })).expect(200);
   });
-  it('does not give super admin implicit bypass', async () => {
-    await get('admin', token({ role: 'ROOT_CODE' })).expect(403);
+  it('does not give account admin implicit bypass', async () => {
+    await get('admin', token({ role: 'ACCOUNT_ADMIN' })).expect(403);
   });
   it('requires all explicitly declared permissions, even for admins', async () => {
     await get(

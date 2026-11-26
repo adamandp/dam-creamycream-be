@@ -5,11 +5,13 @@ export async function seedCartItems(prisma: PrismaClient) {
   const carts = await prisma.cart.findMany();
 
   await prisma.cartItem.createMany({
-    data: Array.from({ length: carts.length * 6 }).map((_, index) => ({
-      quantity: Math.floor(Math.random() * 10),
-      productId: products[index % products.length].id,
-      cartId: carts[index % carts.length].id,
-    })),
+    data: carts.flatMap((cart, index) =>
+      products.slice(0, 6).map((_, i) => ({
+        quantity: Math.floor(Math.random() * 10) + 1,
+        productId: products[(index + i) % products.length].id,
+        cartId: cart.id,
+      })),
+    ),
   });
 
   console.log('Seeding cart items done');

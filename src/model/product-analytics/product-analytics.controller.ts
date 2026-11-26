@@ -21,7 +21,7 @@ import {
 } from './product-analytics.interface';
 import { PaginationDto } from 'src/common/common.dto';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('product-analytics')
 export class ProductAnalyticsController {
   constructor(
@@ -31,7 +31,7 @@ export class ProductAnalyticsController {
     this.loger.setContext(ProductAnalyticsController.name);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post()
   create(
     @CurrentUser() actor: JwtPayload,
@@ -48,7 +48,7 @@ export class ProductAnalyticsController {
     return this.service.findByProduct(id, { limit, page });
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('user')
   async findByUser(
     @CurrentUser() request: JwtPayload,

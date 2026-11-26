@@ -21,7 +21,7 @@ import {
 import type { WebResponse } from 'src/common/common.interface';
 import { PaginationDto } from 'src/common/common.dto';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('vouchers')
 export class VouchersController {
   constructor(

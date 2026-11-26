@@ -13,7 +13,6 @@ import {
   FindByUserAddressResDto as FindByUserDto,
   ValidateAddressResDto as ValidateDto,
 } from './addresses.interface';
-import { validateUpdate } from 'src/utils/validate-update';
 import { PinoLogger } from 'nestjs-pino';
 import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 
@@ -36,6 +35,7 @@ export class AddressesService {
     const data = { ...body, userId: actor.sub };
     return await this.prisma
       .$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'address:' + actor.sub},0))::text`;
         const count = await tx.address.count({
           where: { userId: data.userId },
         });
@@ -115,28 +115,49 @@ export class AddressesService {
     body: UpdateAddressDto,
     actor: JwtPayload,
   ): Promise<WebResponse> {
-    const exsitingAddress = await this.findById(id, actor);
     const { userId: _ignored, ...changes } = body as UpdateAddressDto & {
       userId?: string;
     };
-    return await this.prisma.address
-      .update({
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'address:' + actor.sub},0))::text`;
+      const existing = await tx.address.findUniqueOrThrow({
         where: { id, userId: actor.sub },
-        data: validateUpdate(changes, exsitingAddress.data!),
-      })
-      .then(() => ({ message: Messages.update(this.name) }));
+      });
+      if (changes.isPrimary === false && existing.isPrimary)
+        throw new ConflictException('Choose another primary address first');
+      if (changes.isPrimary === true)
+        await tx.address.updateMany({
+          where: { userId: actor.sub, isPrimary: true, id: { not: id } },
+          data: { isPrimary: false },
+        });
+      await tx.address.update({
+        where: { id, userId: actor.sub },
+        data: changes,
+      });
+      return { message: Messages.update(this.name) };
+    });
   }
 
   async remove(id: string, actor: JwtPayload): Promise<WebResponse> {
-    const exisitingAddress = await this.findById(id, actor);
-    return await this.prisma.$transaction(async (tx) => {
-      const count = await tx.address.count({
-        where: { userId: exisitingAddress.data!.userId },
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'address:' + actor.sub},0))::text`;
+      const existing = await tx.address.findUniqueOrThrow({
+        where: { id, userId: actor.sub },
       });
+      const count = await tx.address.count({ where: { userId: actor.sub } });
       if (count <= 1) throw new ConflictException(ErrorMessage.strictDelete);
-      return await tx.address
-        .delete({ where: { id, userId: actor.sub } })
-        .then(() => ({ message: Messages.delete(this.name) }));
+      await tx.address.delete({ where: { id, userId: actor.sub } });
+      if (existing.isPrimary) {
+        const replacement = await tx.address.findFirstOrThrow({
+          where: { userId: actor.sub },
+          orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+        });
+        await tx.address.update({
+          where: { id: replacement.id },
+          data: { isPrimary: true },
+        });
+      }
+      return { message: Messages.delete(this.name) };
     });
   }
 }

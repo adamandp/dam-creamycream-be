@@ -1,18 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from './prisma.service';
-
-describe('PrismaService', () => {
-  let service: PrismaService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [PrismaService],
-    }).compile();
-
-    service = module.get<PrismaService>(PrismaService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+describe('Prisma connection configuration', () => {
+  it('rejects non PostgreSQL connection URLs', () =>
+    expect(
+      () =>
+        new PrismaService(
+          new ConfigService({ DATABASE_URL: 'http://example.test' }),
+        ),
+    ).toThrow());
 });

@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Messages } from 'src/utils/message.helper';
-import { validateUpdate } from 'src/utils/validate-update';
 import { NotFoundException } from 'src/exceptions';
 import { PaginationDto } from 'src/common/common.dto';
 import { WebResponse } from 'src/common/common.interface';
@@ -66,15 +65,19 @@ export class InventoryService {
   }
 
   async update(id: string, body: UpdateInventoryDto): Promise<WebResponse> {
-    const exsitingOrder = await this.prisma.inventory.findUniqueOrThrow({
-      where: { id },
-      omit: { id: true, createdAt: true, updatedAt: true },
+    const result = await this.prisma.inventory.updateMany({
+      where: {
+        id,
+        ...(body.quantity === undefined
+          ? {}
+          : { reservedQuantity: { lte: body.quantity } }),
+      },
+      data: { quantity: body.quantity, isActive: body.isActive },
     });
-    return this.prisma.inventory
-      .update({
-        where: { id },
-        data: validateUpdate(body, exsitingOrder),
-      })
-      .then(() => ({ message: Messages.update('Inventory') }));
+    if (result.count !== 1)
+      throw new ConflictException(
+        'Inventory not found or quantity below reserved stock',
+      );
+    return { message: Messages.update('Inventory') };
   }
 }

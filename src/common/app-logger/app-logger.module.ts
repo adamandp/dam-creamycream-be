@@ -25,34 +25,7 @@ import { Request, Response } from 'express';
                     ignore: 'pid,hostname',
                   },
                 }
-              : {
-                  targets: [
-                    {
-                      target: 'pino/file',
-                      level: 'error',
-                      options: {
-                        destination: './logs/error.log',
-                        mkdir: true,
-                      },
-                    },
-                    {
-                      target: 'pino/file',
-                      level: 'warn',
-                      options: {
-                        destination: './logs/warn.log',
-                        mkdir: true,
-                      },
-                    },
-                    {
-                      target: 'pino/file',
-                      level: 'info',
-                      options: {
-                        destination: './logs/info.log',
-                        mkdir: true,
-                      },
-                    },
-                  ],
-                },
+              : undefined,
             autoLogging: true,
             redact: {
               paths: [

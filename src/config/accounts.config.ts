@@ -8,12 +8,15 @@ export class AccountsConfig {
   readonly issuer: string;
   readonly audience: string;
   readonly baseUrl: string;
-  readonly roles: Record<'SUPER_ADMIN' | 'ADMIN' | 'CUSTOMER', string>;
+  readonly roles: Record<'STORE_ADMIN' | 'CUSTOMER', string>;
   readonly origins: string[];
 
   constructor(config: ConfigService) {
     this.publicKey = config
-      .getOrThrow<string>('ACCOUNTS_JWT_PUBLIC_KEY')
+      .get<string>(
+        'ACCOUNTS_JWT_PUBLIC_KEY',
+        config.get<string>('ACCESS_TOKEN_PUBLIC_KEY', ''),
+      )
       .replace(/\\n/g, '\n')
       .trim();
     if (!/^-----BEGIN (RSA )?PUBLIC KEY-----/.test(this.publicKey))
@@ -38,8 +41,7 @@ export class AccountsConfig {
       throw new Error('Invalid Accounts Service URL');
     this.baseUrl = url.href.replace(/\/$/, '');
     this.roles = {
-      SUPER_ADMIN: config.getOrThrow<string>('ROLE_SUPER_ADMIN').trim(),
-      ADMIN: config.getOrThrow<string>('ROLE_ADMIN').trim(),
+      STORE_ADMIN: config.getOrThrow<string>('ROLE_STORE_ADMIN').trim(),
       CUSTOMER: config.getOrThrow<string>('ROLE_CUSTOMER').trim(),
     };
     this.origins = config
@@ -51,7 +53,8 @@ export class AccountsConfig {
       !this.issuer ||
       !this.audience ||
       Object.values(this.roles).some((v) => !v) ||
-      new Set(Object.values(this.roles)).size !== 3 ||
+      new Set(Object.values(this.roles)).size !== 2 ||
+      Object.values(this.roles).includes('ACCOUNT_ADMIN') ||
       !this.origins.length
     )
       throw new Error('Invalid accounts security configuration');

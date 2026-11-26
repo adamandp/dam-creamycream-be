@@ -12,8 +12,25 @@ export class RedisService
     private readonly configService: ConfigService,
     private readonly logger: PinoLogger,
   ) {
-    super(configService.getOrThrow<string>('REDIS_URL'));
+    super(RedisService.url(configService), {
+      maxRetriesPerRequest: 2,
+      connectTimeout: 5000,
+      commandTimeout: 5000,
+      ...(process.env.NODE_ENV === 'production'
+        ? { tls: { rejectUnauthorized: true } }
+        : {}),
+    });
     this.logger.setContext(RedisService.name);
+  }
+
+  private static url(config: ConfigService) {
+    const url = config.getOrThrow<string>('REDIS_URL');
+    if (
+      !['redis:', 'rediss:'].includes(new URL(url).protocol) ||
+      (process.env.NODE_ENV === 'production' && !url.startsWith('rediss://'))
+    )
+      throw new Error('Production Redis requires TLS');
+    return url;
   }
 
   async onModuleInit() {

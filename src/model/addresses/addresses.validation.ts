@@ -19,6 +19,7 @@ export const BaseAddressSchema = z
         message: `📞 Invalid phone number! Double-check and try again! 🤳 {Invalid Phone}`,
       },
     ),
+    destinationId: z.coerce.number().int().positive().nullish(),
     province: stringMinMax('Province', 1, 100),
     city: stringMinMax('City', 1, 100),
     subdistrict: stringMinMax('Subdistrict', 1, 100),

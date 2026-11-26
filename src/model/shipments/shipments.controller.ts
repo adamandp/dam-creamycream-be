@@ -1,6 +1,7 @@
 import { Roles } from 'src/decorators/access.decorator';
 import {
   Controller,
+  BadRequestException,
   Get,
   Body,
   Patch,
@@ -18,10 +19,13 @@ import {
   FindByIdShipmentDto as FindByIdDto,
   ShippingData,
 } from './shipments.interface';
+import { UserRateLimit } from 'src/guards/user-rate-limit.guard';
 import { PinoLogger } from 'nestjs-pino';
-import { CostDto } from './dto/cost-shipment.dto';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CostDto, QuoteDto } from './dto/cost-shipment.dto';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('shipments')
 export class ShipmentsController {
   constructor(
@@ -53,7 +57,23 @@ export class ShipmentsController {
     return this.shipmentsService.updateStatus(id, body);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('CUSTOMER', 'STORE_ADMIN')
+  @UserRateLimit(30)
+  @Get('destinations/search')
+  destinations(@Query('q') q: string) {
+    if (typeof q !== 'string' || q.trim().length < 3 || q.trim().length > 100)
+      throw new BadRequestException('Search must contain 3–100 characters');
+    return this.shipmentsService.destinations(q.trim());
+  }
+
+  @Roles('CUSTOMER')
+  @UserRateLimit(20)
+  @Post('quote')
+  quote(@Body() request: QuoteDto, @CurrentUser() actor: JwtPayload) {
+    return this.shipmentsService.quote(request, actor.sub);
+  }
+
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post('cost')
   async cost(@Body() request: CostDto): Promise<WebResponse<ShippingData[]>> {
     return await this.shipmentsService.cost(request);

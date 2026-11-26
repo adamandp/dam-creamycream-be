@@ -8,10 +8,21 @@ describe('RecommendationsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RecommendationsController],
-      providers: [RecommendationsService],
-    }).compile();
+      providers: [{ provide: RecommendationsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
-    controller = module.get<RecommendationsController>(RecommendationsController);
+    controller = module.get<RecommendationsController>(
+      RecommendationsController,
+    );
   });
 
   it('should be defined', () => {

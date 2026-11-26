@@ -53,6 +53,7 @@ export class ProductsService {
         data: {
           ...data,
           categories: { connect: { id: categoryId } },
+          inventory: { create: { quantity: 0, isActive: true } },
         },
       })
       .then(() => ({

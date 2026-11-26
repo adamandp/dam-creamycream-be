@@ -9,9 +9,15 @@ export class PrismaService
   implements OnModuleInit, OnModuleDestroy
 {
   constructor(configService: ConfigService) {
-    const adapter = new PrismaPg({
-      connectionString: configService.getOrThrow('DATABASE_URL'),
-    });
+    const connectionString = configService.getOrThrow<string>('DATABASE_URL');
+    const url = new URL(connectionString);
+    if (
+      !['postgresql:', 'postgres:'].includes(url.protocol) ||
+      (process.env.NODE_ENV === 'production' &&
+        url.searchParams.get('sslmode') !== 'verify-full')
+    )
+      throw new Error('Production database requires sslmode=verify-full');
+    const adapter = new PrismaPg({ connectionString });
 
     super({ adapter });
   }

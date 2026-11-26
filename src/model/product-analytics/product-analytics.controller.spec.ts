@@ -8,10 +8,21 @@ describe('ProductAnalyticsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductAnalyticsController],
-      providers: [ProductAnalyticsService],
-    }).compile();
+      providers: [{ provide: ProductAnalyticsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
-    controller = module.get<ProductAnalyticsController>(ProductAnalyticsController);
+    controller = module.get<ProductAnalyticsController>(
+      ProductAnalyticsController,
+    );
   });
 
   it('should be defined', () => {

@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Permissions, Roles } from 'src/decorators/access.decorator';
 import { AccountsClient } from 'src/integrations/accounts/accounts.client';
 import { Req } from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
@@ -28,7 +28,7 @@ import {
   FindByNotifiactionCountUserNotificationDto as FindByNotificationCount,
 } from './user-notifications.interface';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('user-notifications')
 export class UserNotificationsController {
   constructor(
@@ -39,6 +39,7 @@ export class UserNotificationsController {
     this.logger.setContext(UserNotificationsController.name);
   }
 
+  @Permissions('user.read')
   @Post()
   async create(
     @Req() req: ExpressRequest,
@@ -55,7 +56,7 @@ export class UserNotificationsController {
     return this.service.findAll(pagination);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('me')
   findByUser(
     @CurrentUser() request: JwtPayload,
@@ -71,7 +72,7 @@ export class UserNotificationsController {
     return this.service.findById(id);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('count/me')
   findByUserCount(
     @CurrentUser() request: JwtPayload,
@@ -94,11 +95,11 @@ export class UserNotificationsController {
     return this.service.findByNotificationCount(id);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Patch(':id')
   updateRead(
     @CurrentUser() actor: JwtPayload,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<WebResponse> {
     return this.service.updateRead(id, actor);
   }

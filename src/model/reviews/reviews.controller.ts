@@ -27,7 +27,7 @@ import {
 } from './reviews.interface';
 import { PaginationDto } from 'src/common/common.dto';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('reviews')
 export class ReviewsController {
   constructor(
@@ -35,7 +35,7 @@ export class ReviewsController {
     private readonly accounts: AccountsClient,
   ) {}
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Post()
   async create(
     @CurrentUser() actor: JwtPayload,
@@ -65,7 +65,7 @@ export class ReviewsController {
     return this.reviewsService.findByProduct(id, pagination);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Get('me')
   findByUser(
     @CurrentUser() request: JwtPayload,
@@ -81,7 +81,7 @@ export class ReviewsController {
     return this.reviewsService.findById(id);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Patch(':id')
   update(
     @CurrentUser() actor: JwtPayload,
@@ -91,7 +91,7 @@ export class ReviewsController {
     return this.reviewsService.update(id, updateReviewDto, actor);
   }
 
-  @Roles('ADMIN', 'SUPER_ADMIN', 'CUSTOMER')
+  @Roles('STORE_ADMIN', 'CUSTOMER')
   @Delete(':id')
   remove(
     @CurrentUser() actor: JwtPayload,

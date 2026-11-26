@@ -5,7 +5,7 @@ import { WebResponse } from 'src/common/common.interface';
 import { FindOneProductResDto } from './products.interface';
 import { PinoLogger } from 'nestjs-pino';
 
-@Roles('ADMIN', 'SUPER_ADMIN')
+@Roles('STORE_ADMIN')
 @Controller('product')
 export class ProductController {
   constructor(

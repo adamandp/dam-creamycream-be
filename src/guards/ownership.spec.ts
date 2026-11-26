@@ -20,7 +20,9 @@ describe('Business resource ownership (mock database)', () => {
       updateMany: jest.fn().mockResolvedValue({ count: 0 }),
       create: jest.fn().mockResolvedValue({}),
     };
-    const prisma = { $transaction: jest.fn((fn) => fn({ address })) } as any;
+    const prisma = {
+      $transaction: jest.fn((fn) => fn({ address, $queryRaw: jest.fn() })),
+    } as any;
     const service = new AddressesService(prisma, logger);
     await service.create({ userId: otherUser, isPrimary: false } as any, actor);
     expect(address.create).toHaveBeenCalledWith({
@@ -49,7 +51,12 @@ describe('Business resource ownership (mock database)', () => {
         .mockResolvedValue({ id, userId: actor.sub, recipientName: 'Old' }),
       update: jest.fn().mockResolvedValue({}),
     };
-    const service = new AddressesService({ address } as any, logger);
+    const service = new AddressesService(
+      {
+        $transaction: (fn: any) => fn({ address, $queryRaw: jest.fn() }),
+      } as any,
+      logger,
+    );
     await service.update(
       id,
       { recipientName: 'New', userId: otherUser } as any,
@@ -86,17 +93,18 @@ describe('Business resource ownership (mock database)', () => {
     await service.remove(id, actor);
     expect(remove).toHaveBeenCalledWith({ where: { id, userId: actor.sub } });
   });
-  it('scopes voucher consumption to owner', async () => {
-    const update = jest.fn().mockResolvedValue({});
+  it('scopes voucher list to owner and exposes no direct use mutation', async () => {
+    const findMany = jest.fn().mockResolvedValue([]);
     const service = new UserVouchersService(
-      { userVoucher: { update } } as any,
+      { userVoucher: { findMany } } as any,
       logger,
       {} as any,
     );
-    await service.use(id, actor);
-    expect(update).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id, userId: actor.sub } }),
+    await service.findByUser(actor);
+    expect(findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { userId: actor.sub } }),
     );
+    expect('use' in service).toBe(false);
   });
   it('scopes notification read mutation to owner', async () => {
     const update = jest.fn().mockResolvedValue({});

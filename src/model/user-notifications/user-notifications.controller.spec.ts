@@ -8,10 +8,21 @@ describe('UserNotificationsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserNotificationsController],
-      providers: [UserNotificationsService],
-    }).compile();
+      providers: [{ provide: UserNotificationsService, useValue: {} }],
+    })
+      .useMocker(() => ({
+        setContext: jest.fn(),
+        trace: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      }))
+      .compile();
 
-    controller = module.get<UserNotificationsController>(UserNotificationsController);
+    controller = module.get<UserNotificationsController>(
+      UserNotificationsController,
+    );
   });
 
   it('should be defined', () => {

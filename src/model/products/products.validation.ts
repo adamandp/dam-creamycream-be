@@ -20,7 +20,9 @@ export const BaseProductSchema = z
       })
       .nullish(),
     description: stringMinMax('Description', 1, 255).nullable(),
+    weightGrams: z.coerce.number().int().positive().max(1000000).nullish(),
     price: baseNumber('price')
+      .int()
       .min(
         1000,
         `💰 price must be at least Rp1.000. Don't be cheap! 🤑 {Price Too Low}`,

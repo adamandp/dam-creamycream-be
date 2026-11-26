@@ -12,6 +12,7 @@ const OrderInputSchema = BaseOrderSchema.pick({
   voucherIds: z
     .array(baseUUID('Voucher ID'))
     .max(2, { message: 'Voucher ID max 2' })
+    .refine((ids) => new Set(ids).size === ids.length, 'Duplicate vouchers')
     .nullish(),
 });
 
@@ -20,8 +21,14 @@ const OrderItemInputSchema = BaseOrderItemSchema.pick({
   discountId: true,
   quantity: true,
 })
+  .extend({ quantity: z.number().int().min(1).max(100) })
   .array()
-  .min(1);
+  .min(1)
+  .max(100)
+  .refine(
+    (items) => new Set(items.map((i) => i.productId)).size === items.length,
+    'Duplicate product IDs',
+  );
 
 const ShipmentInputSchema = BaseShipmentSchema.pick({
   courier: true,
@@ -36,10 +43,14 @@ const PaymentInputSchema = BasePaymentSchema.pick({
 });
 
 const CreateOrderSchema = z.object({
-  order: OrderInputSchema,
+  order: OrderInputSchema.omit({ userId: true }),
   orderItems: OrderItemInputSchema,
-  shipment: ShipmentInputSchema,
-  payment: PaymentInputSchema,
+  shipment: ShipmentInputSchema.partial({
+    cost: true,
+    estimated: true,
+    description: true,
+  }),
+  payment: PaymentInputSchema.optional(),
 });
 
 class CheckOutDto
