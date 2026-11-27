@@ -32,5 +32,5 @@ for(const file of files){
 }
 lines.splice(6,0,'**'+count+' endpoints.**','');
 fs.mkdirSync('docs/api-documentation',{recursive:true});
-fs.writeFileSync('docs/api-documentation/endpoints.md',lines.join('\n')+'\n');
+fs.writeFileSync('docs/api-documentation/endpoints.md',lines.join('\n').trimEnd()+'\n');
 console.log(count+' endpoints documented');

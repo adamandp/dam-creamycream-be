@@ -4,7 +4,7 @@ Generated from current controller source. Do not edit manually. Run `npm run doc
 
 All URLs are relative to the commerce API base URL. Public routes do not require a Bearer token; the Payment Service webhook requires a valid signature. Protected routes require a valid Accounts Service access JWT. DTO names link to the contract in Swagger and source. A customer route is scoped to the current actor where applicable.
 
-**92 endpoints.**
+**95 endpoints.**
 
 
 ## addresses
@@ -110,6 +110,7 @@ Source: [`src/model/payments/payments.controller.ts`](../../src/model/payments/p
 | POST | `/payments/:orderId/cancel` | CUSTOMER | Headers authorization: string; Param orderId, ParseUUIDPipe: string | `cancel` |
 | GET | `/payments/methods` | CUSTOMER, STORE_ADMIN | Headers authorization: string | `methods` |
 | GET | `/payments/reconcile` | Public | Headers authorization: string | `reconcile` |
+| GET | `/payments/:orderId/instructions` | CUSTOMER, STORE_ADMIN | Param orderId, ParseUUIDPipe: string; Headers authorization: string | `instructions` |
 | GET | `/payments/:orderId` | CUSTOMER, STORE_ADMIN | Param orderId, ParseUUIDPipe: string | `find` |
 
 ## product-analytics
@@ -191,6 +192,8 @@ Source: [`src/model/shipments/shipments.controller.ts`](../../src/model/shipment
 | GET | `/shipments` | STORE_ADMIN | Query: PaginationDto | `findAll` |
 | GET | `/shipments/:id` | STORE_ADMIN | Param id, ParseUUIDPipe: string | `findById` |
 | PATCH | `/shipments/:id/status` | STORE_ADMIN | Param id, ParseUUIDPipe: string; Body: UpdateStatusShipmentDto | `updateStatus` |
+| GET | `/shipments/destinations/search` | CUSTOMER, STORE_ADMIN | Query q: string | `destinations` |
+| POST | `/shipments/quote` | CUSTOMER | Body: QuoteDto | `quote` |
 | POST | `/shipments/cost` | STORE_ADMIN, CUSTOMER | Body: CostDto | `cost` |
 
 ## user-notifications

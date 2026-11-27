@@ -7,7 +7,10 @@ import { timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { Logger } from 'nestjs-pino';
 import { NestExpressApplication } from '@nestjs/platform-express';
-export function configureApp(app: NestExpressApplication) {
+export function configureApp(
+  app: NestExpressApplication,
+  options: { shutdownHooks?: boolean } = {},
+) {
   const documentFactory = () => buildOpenApiDocument(app);
   if (process.env.NODE_ENV === 'production') {
     const expected = Buffer.from(
@@ -57,5 +60,5 @@ export function configureApp(app: NestExpressApplication) {
     throw new Error('Invalid trusted proxy IP');
   if (proxies.length) app.set('trust proxy', proxies);
   app.useBodyParser('json', { limit: '2mb' });
-  app.enableShutdownHooks();
+  if (options.shutdownHooks !== false) app.enableShutdownHooks();
 }

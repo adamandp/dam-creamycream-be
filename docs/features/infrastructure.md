@@ -11,7 +11,7 @@ Configure Accounts and Payment Service settings as described in [.env.example](.
 
 ## CI pipeline
 
-Install lockfile dependencies, generate Prisma client, compile TypeScript, run unit/security suite, start isolated PostgreSQL/Redis, run db:setup, run HTTP end-to-end tests with mocked Payment Service, check generated documentation and audit runtime dependencies. The GitHub Actions workflow is local until committed/pushed; it does not deploy automatically.
+Install lockfile dependencies, generate Prisma client, compile TypeScript, run unit/security suite, start isolated PostgreSQL/Redis, run db:setup, run HTTP end-to-end tests with mocked Payment Service, check generated documentation and audit runtime dependencies. The GitHub Actions workflow validates pushes; Vercel handles deployments separately.
 
 Run locally:
 ```sh
@@ -25,4 +25,4 @@ npm run db:setup
 npm run test:e2e
 ```
 
-Use npm run start:prod after build in a continuously running Node runtime (the command explicitly selects production). The reconciliation worker must stay alive; Vercel/Lambda runtimes are rejected unless a separate scheduler architecture is implemented. Monitor reconciliation warnings and pending-payment age; investigate provider ambiguity without manually forcing payment status. The compiled entry point is dist/src/main.js. Deployment target and secrets are not configured here. CI does not substitute for a live sandbox payment, webhook registration, Accounts Service integration test, load testing, or refunds.
+Use npm run start:prod after build in a continuously running Node runtime (the command explicitly selects production). Vercel uses api/index.ts and the daily /payments/reconcile cron protected by CRON_SECRET. Payment Service owns upstream reconciliation. Configure all production environment variables before deployment; the build does not verify runtime credentials. Monitor reconciliation warnings and pending-payment age; investigate provider ambiguity without manually forcing payment status. The compiled entry point is dist/src/main.js. Production service origins are listed in .env.example; configure secrets in the deployment environment. CI does not substitute for a live sandbox payment, webhook registration, Accounts Service integration test, load testing, or refunds.

@@ -3,6 +3,14 @@ export function validateProductionEnvironment(
 ) {
   if (env.NODE_ENV !== 'production') return;
   for (const key of [
+    'DATABASE_URL',
+    'REDIS_URL',
+    'ACCOUNTS_SERVICE_URL',
+    'ACCOUNTS_JWT_ISSUER',
+    'ACCOUNTS_JWT_AUDIENCE',
+    'ROLE_STORE_ADMIN',
+    'ROLE_CUSTOMER',
+    'FRONTEND_ORIGINS',
     'PAYMENT_SERVICE_URL',
     'PAYMENT_INTERNAL_HMAC_SECRET',
     'WEBHOOK_CALLBACK_SECRET',
@@ -19,8 +27,21 @@ export function validateProductionEnvironment(
     if (!env[key]?.trim())
       throw new Error('Missing production configuration: ' + key);
   }
-  for (const key of ['PAYMENT_SERVICE_URL', 'RAJAONGKIR_BASE_URL']) {
-    const url = new URL(env[key]!);
+  if (!(env.ACCOUNTS_JWT_PUBLIC_KEY ?? env.ACCESS_TOKEN_PUBLIC_KEY)?.trim())
+    throw new Error(
+      'Missing production configuration: ACCOUNTS_JWT_PUBLIC_KEY',
+    );
+  for (const key of [
+    'ACCOUNTS_SERVICE_URL',
+    'PAYMENT_SERVICE_URL',
+    'RAJAONGKIR_BASE_URL',
+  ]) {
+    let url: URL;
+    try {
+      url = new URL(env[key]!);
+    } catch {
+      throw new Error('Invalid URL: ' + key);
+    }
     if (
       url.protocol !== 'https:' ||
       url.username ||
@@ -38,4 +59,14 @@ export function validateProductionEnvironment(
     throw new Error('Invalid shipping origin');
   if (env.NODE_TLS_REJECT_UNAUTHORIZED === '0')
     throw new Error('TLS certificate verification must be enabled');
+}
+
+/** Only report known safe configuration errors; never log arbitrary URLs or credentials. */
+export function startupFailureReason(error: unknown): string {
+  const message = error instanceof Error ? error.message : '';
+  return /^(Missing production configuration|Invalid URL): [A-Z_]+$/.test(
+    message,
+  )
+    ? message
+    : 'Check configuration and service connectivity.';
 }

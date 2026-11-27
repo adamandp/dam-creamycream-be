@@ -1,7 +1,20 @@
-import { validateProductionEnvironment } from './production.config';
+import {
+  startupFailureReason,
+  validateProductionEnvironment,
+} from './production.config';
 describe('Production configuration', () => {
   const env = {
     NODE_ENV: 'production',
+    DATABASE_URL:
+      'postgresql://fixture:fixture@db.example.com/store?sslmode=verify-full',
+    REDIS_URL: 'rediss://redis.example.com',
+    ACCOUNTS_SERVICE_URL: 'https://accounts.example.com',
+    ACCOUNTS_JWT_PUBLIC_KEY: 'fixture',
+    ACCOUNTS_JWT_ISSUER: 'fixture',
+    ACCOUNTS_JWT_AUDIENCE: 'fixture',
+    ROLE_STORE_ADMIN: 'STORE_ADMIN',
+    ROLE_CUSTOMER: 'CUSTOMER',
+    FRONTEND_ORIGINS: 'https://store.example.com',
     PAYMENT_SERVICE_URL: 'https://pay.example.com',
     PAYMENT_INTERNAL_HMAC_SECRET: 'fixture',
     WEBHOOK_CALLBACK_SECRET: 'fixture',
@@ -22,6 +35,10 @@ describe('Production configuration', () => {
   it('rejects invalid configuration', () => {
     for (const extra of [
       { PAYMENT_SERVICE_URL: 'http://pay.example.com' },
+      { ACCOUNTS_SERVICE_URL: 'not-a-url' },
+      { DATABASE_URL: '' },
+      { REDIS_URL: '' },
+      { ACCOUNTS_JWT_PUBLIC_KEY: '' },
       { WEBHOOK_CALLBACK_SECRET: '' },
       { SHIPPING_ORIGIN_ID: '-1' },
       { NODE_TLS_REJECT_UNAUTHORIZED: '0' },
@@ -29,5 +46,15 @@ describe('Production configuration', () => {
       expect(() =>
         validateProductionEnvironment({ ...env, ...extra }),
       ).toThrow();
+  });
+  it('reports only safe configuration diagnostics', () => {
+    expect(
+      startupFailureReason(
+        new Error('Missing production configuration: DATABASE_URL'),
+      ),
+    ).toBe('Missing production configuration: DATABASE_URL');
+    expect(
+      startupFailureReason(new Error('postgresql://user:secret@db')),
+    ).not.toContain('secret');
   });
 });

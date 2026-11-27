@@ -275,7 +275,7 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
         (n: number, path: any) => n + Object.keys(path).length,
         0,
       ),
-    ).toBe(92);
+    ).toBe(95);
   });
   it('rejects invalid quantities and another account address', async () => {
     await checkout(randomUUID(), {
