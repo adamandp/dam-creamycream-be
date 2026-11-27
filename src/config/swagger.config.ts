@@ -6,7 +6,7 @@ export const swaggerConfig = new DocumentBuilder()
     'Business API. Obtain a short-lived RS256 access token directly from Accounts Service; send it as a Bearer token. Payments are handled by the centralized Payment Service.',
   )
   .setVersion('1.0')
-  .addServer('.')
+  .addServer('../')
   .addBearerAuth(
     { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
     'accessToken',
