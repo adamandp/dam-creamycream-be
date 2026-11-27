@@ -21,7 +21,7 @@ export class HealthService {
   healthCheck(): Promise<HealthCheckResult> {
     return this.health.check([
       async () => ({ application: { status: 'up' } }),
-      () => this.prismaHealth.pingCheck('db', this.prisma),
+      () => this.prismaHealth.pingCheck('db', this.prisma, { timeout: 5000 }),
       async () => ({
         redis: { status: (await this.redis.ping()) === 'PONG' ? 'up' : 'down' },
       }),
@@ -29,6 +29,6 @@ export class HealthService {
   }
 
   dbCheck() {
-    return this.prismaHealth.pingCheck('db', this.prisma);
+    return this.prismaHealth.pingCheck('db', this.prisma, { timeout: 5000 });
   }
 }

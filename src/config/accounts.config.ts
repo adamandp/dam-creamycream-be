@@ -10,21 +10,35 @@ export class AccountsConfig {
   readonly origins: string[];
 
   constructor(config: ConfigService) {
-    this.publicKey = config
+    const rawKey = config
       .get<string>(
         'ACCOUNTS_JWT_PUBLIC_KEY',
         config.get<string>('ACCESS_TOKEN_PUBLIC_KEY', ''),
       )
       .replace(/\\n/g, '\n')
       .trim();
-    if (!/^-----BEGIN (RSA )?PUBLIC KEY-----/.test(this.publicKey))
+    let key;
+    try {
+      if (/^-----BEGIN (RSA )?PUBLIC KEY-----/.test(rawKey)) {
+        key = createPublicKey(rawKey);
+      } else if (/^[A-Za-z0-9+/]+={0,2}$/.test(rawKey)) {
+        key = createPublicKey({
+          key: Buffer.from(rawKey, 'base64'),
+          format: 'der',
+          type: 'spki',
+        });
+      } else {
+        throw new Error('Invalid public key format');
+      }
+    } catch {
       throw new Error('Expected a public RSA key');
-    const key = createPublicKey(this.publicKey);
+    }
     if (
       key.asymmetricKeyType !== 'rsa' ||
       (key.asymmetricKeyDetails?.modulusLength ?? 0) < 2048
     )
       throw new Error('Expected an RSA public key of at least 2048 bits');
+    this.publicKey = key.export({ type: 'spki', format: 'pem' }).toString();
     const url = new URL(config.getOrThrow<string>('ACCOUNTS_SERVICE_URL'));
     if (
       url.username ||
