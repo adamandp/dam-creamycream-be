@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { ProductsService } from '../products/products.service';
 import { RemoveFromCartDto } from './dto/remove-from-cart';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
 import { FindByUserCartDto as FindByUserDto } from './carts.interface';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Injectable()
 export class CartsService {

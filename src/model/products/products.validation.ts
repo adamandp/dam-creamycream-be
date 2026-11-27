@@ -1,11 +1,11 @@
-import { regex } from 'src/utils/regex';
+import { regex } from '../../utils/regex';
 import {
   baseBoolean,
   baseDate,
   baseNumber,
   baseUUID,
   stringMinMax,
-} from 'src/utils/zod.helper';
+} from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseProductSchema = z

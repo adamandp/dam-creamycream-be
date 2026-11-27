@@ -1,4 +1,4 @@
-import { baseDate, baseEnum, baseUUID } from 'src/utils/zod.helper';
+import { baseDate, baseEnum, baseUUID } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseUserVoucherSchema = z.object({

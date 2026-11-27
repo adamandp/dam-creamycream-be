@@ -1,9 +1,9 @@
-import { assertImageFile } from 'src/config/multer.config';
+import { assertImageFile } from '../config/multer.config';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import { PinoLogger } from 'nestjs-pino';
-import { ErrorMessage } from 'src/utils/message.helper';
+import { ErrorMessage } from '../utils/message.helper';
 
 @Injectable()
 export class UploadService {

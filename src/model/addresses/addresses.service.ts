@@ -1,12 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { WebResponse } from '../../common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { ErrorMessage, Messages } from 'src/utils/message.helper';
-import { NotFoundException } from 'src/exceptions';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { ErrorMessage, Messages } from '../../utils/message.helper';
+import { NotFoundException } from '../../exceptions';
 import {
   FindAllAddressResDto as FindAllDto,
   FindByIdAddressResDto as FindByIdDto,
@@ -14,7 +14,7 @@ import {
   ValidateAddressResDto as ValidateDto,
 } from './addresses.interface';
 import { PinoLogger } from 'nestjs-pino';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Injectable()
 export class AddressesService {

@@ -1,4 +1,4 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
+import { Public, Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -13,13 +13,13 @@ import {
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 import { PinoLogger } from 'nestjs-pino';
 import {
   FindAllCategoryDto as FindAllDto,
   FindByIdCategoryDto as FindByIdDto,
 } from './categories.interface';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 
 @Roles('STORE_ADMIN')
 @Controller('categories')

@@ -1,9 +1,9 @@
-import { Permissions, Roles } from 'src/decorators/access.decorator';
-import { AccountsClient } from 'src/integrations/accounts/accounts.client';
+import { Permissions, Roles } from '../../decorators/access.decorator';
+import { AccountsClient } from '../../integrations/accounts/accounts.client';
 import { Req } from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { UserVouchersService } from './user-vouchers.service';
 import { CreateUserVoucherDto } from './dto/create-user-voucher.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import type { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import type { WebResponse } from '../../common/common.interface';
 import { PinoLogger } from 'nestjs-pino';
 import {
   FindByUserUserVoucherDto as FindByUserDto,

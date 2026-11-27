@@ -3,7 +3,7 @@ import {
   baseUUID,
   NumberMinMax,
   stringMinMax,
-} from 'src/utils/zod.helper';
+} from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseReviewSchema = z.object({

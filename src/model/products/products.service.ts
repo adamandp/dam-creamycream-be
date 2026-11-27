@@ -1,26 +1,26 @@
-import { assertImageFile } from 'src/config/multer.config';
+import { assertImageFile } from '../../config/multer.config';
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { UploadService } from 'src/common/upload.service';
+import { UploadService } from '../../common/upload.service';
 import { CategoriesService } from '../categories/categories.service';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
 import {
   FindAllProductResDto as FindAllDto,
   FindCatalogProductResDto as FindCatalogDto,
   ValidateProductDto as ValidateDto,
   // FindDetailProductResDto as FindDetailDto,
 } from './products.interface';
-import { validateUpdate } from 'src/utils/validate-update';
-import { DiscountType } from 'src/generated/prisma/enums';
+import { validateUpdate } from '../../utils/validate-update';
+import { DiscountType } from '../../generated/prisma/enums';
 import { ProductQueryDto } from './dto/product-query.dto';
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class ProductsService {

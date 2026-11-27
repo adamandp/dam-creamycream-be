@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 import { FindOneProductResDto } from './products.interface';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { DiscountType } from 'src/generated/prisma/enums';
-import { Messages } from 'src/utils/message.helper';
+import { DiscountType } from '../../generated/prisma/enums';
+import { Messages } from '../../utils/message.helper';
 import { ProductInformationSchema } from './product.validation';
-import { productInformationBuilder } from 'src/utils/product-information.builder';
+import { productInformationBuilder } from '../../utils/product-information.builder';
 
 @Injectable()
 export class ProductService {

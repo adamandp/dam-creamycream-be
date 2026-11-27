@@ -1,4 +1,4 @@
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../../src/generated/prisma/client';
 
 const reviews = [
   'The ice cream was honestly disappointing. It melted way too fast and tasted kind of artificial, like cheap vanilla syrup.',

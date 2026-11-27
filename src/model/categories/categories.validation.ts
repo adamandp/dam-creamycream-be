@@ -4,7 +4,7 @@ import {
   baseName,
   baseUUID,
   stringMinMax,
-} from 'src/utils/zod.helper';
+} from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseCategorySchema = z.object({

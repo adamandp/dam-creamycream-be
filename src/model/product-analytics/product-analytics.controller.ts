@@ -1,6 +1,6 @@
-import { Roles } from 'src/decorators/access.decorator';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { Roles } from '../../decorators/access.decorator';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -13,13 +13,13 @@ import {
 import { ProductAnalyticsService } from './product-analytics.service';
 import { CreateProductAnalyticDto } from './dto/create-product-analytic.dto';
 import { PinoLogger } from 'nestjs-pino';
-import type { WebResponse } from 'src/common/common.interface';
+import type { WebResponse } from '../../common/common.interface';
 import {
   FindByProductProductAnalyticsDto as FindByProductDto,
   FindByUserProductAnalyticsDto as FindByUserDto,
   FindByProductCountProductAnalyticsDto as FindByProductCountDto,
 } from './product-analytics.interface';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 
 @Roles('STORE_ADMIN')
 @Controller('product-analytics')

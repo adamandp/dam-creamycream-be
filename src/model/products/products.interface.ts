@@ -1,6 +1,6 @@
 import z from 'zod';
 import { BaseProductSchema } from './products.validation';
-import { DiscountType } from 'src/generated/prisma/client';
+import { DiscountType } from '../../generated/prisma/client';
 
 export type BaseProductDto = z.infer<typeof BaseProductSchema>;
 

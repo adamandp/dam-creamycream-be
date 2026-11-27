@@ -1,4 +1,4 @@
-import { ProductInformation } from 'src/model/product/product.validation';
+import { ProductInformation } from '../model/product/product.validation';
 
 export function productInformationBuilder(
   description: string,

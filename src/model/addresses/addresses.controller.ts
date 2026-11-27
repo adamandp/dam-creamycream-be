@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -13,16 +13,16 @@ import {
 import { AddressesService } from './addresses.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import type { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import type { WebResponse } from '../../common/common.interface';
 import {
   FindAllAddressResDto as FindAllDto,
   FindByIdAddressResDto as FindByIdDto,
   FindByUserAddressResDto as FindByUserDto,
 } from './addresses.interface';
 import { PinoLogger } from 'nestjs-pino';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Roles('STORE_ADMIN')
 @Controller('addresses')

@@ -1,4 +1,4 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
+import { Public, Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -16,9 +16,9 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PaginationDto } from 'src/common/common.dto';
-import { multerOptions } from 'src/config/multer.config';
-import { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { multerOptions } from '../../config/multer.config';
+import { WebResponse } from '../../common/common.interface';
 import {
   FindAllProductResDto as FindAllDto,
   FindCatalogProductResDto as FindCatalogDto,

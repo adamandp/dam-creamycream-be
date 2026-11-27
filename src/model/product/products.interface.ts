@@ -1,4 +1,4 @@
-import { DiscountType } from 'src/generated/prisma/enums';
+import { DiscountType } from '../../generated/prisma/enums';
 
 export type FindOneProductResDto = {
   id: string;

@@ -1,4 +1,4 @@
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../../src/generated/prisma/client';
 
 export async function seedProductDiscount(prisma: PrismaClient) {
   const products = await prisma.product.findMany();

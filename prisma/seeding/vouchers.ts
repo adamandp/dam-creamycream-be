@@ -2,7 +2,7 @@ import {
   PrismaClient,
   VoucherGroup,
   VoucherType,
-} from 'src/generated/prisma/client';
+} from '../../src/generated/prisma/client';
 
 export async function seedVouchers(prisma: PrismaClient) {
   await prisma.voucher.createMany({

@@ -7,12 +7,12 @@ import {
 } from './product-analytics.interface';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Injectable()
 export class ProductAnalyticsService {

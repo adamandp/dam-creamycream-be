@@ -7,14 +7,14 @@ import {
   FindAllUserVoucherDto as FindAllDto,
   FindByVoucherUserVoucherDto as FindByVoucherDto,
 } from './user-vouchers.interface';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { PaginationDto } from 'src/common/common.dto';
-import { Messages } from 'src/utils/message.helper';
-import { NotFoundException } from 'src/exceptions';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { Messages } from '../../utils/message.helper';
+import { NotFoundException } from '../../exceptions';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import { VouchersService } from '../vouchers/vouchers.service';
 
 @Injectable()

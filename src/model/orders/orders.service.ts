@@ -1,13 +1,13 @@
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { AccountsConfig } from 'src/config/accounts.config';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { AccountsConfig } from '../../config/accounts.config';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CheckOutCommand } from './cqrs/commands/checkout/checkout.command';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 import { CheckOutDto } from './dto/checkout.dto';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 import { FindAllOrderResDto as FindAllDto } from './orders.interface';
 import { FindAllOrderCommand } from './cqrs/queries/find-all/find-all.query';
 

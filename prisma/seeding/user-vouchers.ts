@@ -1,4 +1,4 @@
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../../src/generated/prisma/client';
 
 export async function seedUserVouchers(
   prisma: PrismaClient,

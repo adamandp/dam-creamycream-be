@@ -1,4 +1,4 @@
-import { baseDate, baseUUID, NumberMinMax } from 'src/utils/zod.helper';
+import { baseDate, baseUUID, NumberMinMax } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseCartSchema = z.object({

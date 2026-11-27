@@ -1,13 +1,13 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { WebResponse } from '../../common/common.interface';
 import { FindByUserCartDto as FindByUserDto } from './carts.interface';
 import { PinoLogger } from 'nestjs-pino';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Roles('STORE_ADMIN')
 @Controller('carts')

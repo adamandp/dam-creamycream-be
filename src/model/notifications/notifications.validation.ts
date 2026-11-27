@@ -1,4 +1,4 @@
-import { baseDate, baseUUID, stringMinMax } from 'src/utils/zod.helper';
+import { baseDate, baseUUID, stringMinMax } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseNotificationsSchema = z.object({

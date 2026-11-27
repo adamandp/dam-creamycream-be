@@ -1,7 +1,7 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
+import { Public, Roles } from '../../decorators/access.decorator';
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 import { FindOneProductResDto } from './products.interface';
 import { PinoLogger } from 'nestjs-pino';
 

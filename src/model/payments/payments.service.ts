@@ -11,11 +11,11 @@ import { ConfigService } from '@nestjs/config';
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import axios from 'axios';
 import { z } from 'zod';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { AccountsConfig } from 'src/config/accounts.config';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
-import { PaginationDto } from 'src/common/common.dto';
-import { Prisma } from 'src/generated/prisma/client';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { AccountsConfig } from '../../config/accounts.config';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { Prisma } from '../../generated/prisma/client';
 
 export const paymentInputSchema = z
   .object({

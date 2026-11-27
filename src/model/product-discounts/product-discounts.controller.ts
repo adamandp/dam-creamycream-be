@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -12,13 +12,13 @@ import {
 import { ProductDiscountsService } from './product-discounts.service';
 import { CreateProductDiscountDto } from './dto/create-product-discount.dto';
 import { PinoLogger } from 'nestjs-pino';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 import {
   FindAllProductDiscountResDto as FindAllDto,
   FindByIdProductDiscountResDto as FindByIdDto,
   FindByProductIdProductDiscountResDto as FindByProductIdDto,
 } from './product-discounts.interface';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 
 @Roles('STORE_ADMIN')
 @Controller('product-discounts')

@@ -2,11 +2,11 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Messages } from 'src/utils/message.helper';
-import { NotFoundException } from 'src/exceptions';
-import { PaginationDto } from 'src/common/common.dto';
-import { WebResponse } from 'src/common/common.interface';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { Messages } from '../../utils/message.helper';
+import { NotFoundException } from '../../exceptions';
+import { PaginationDto } from '../../common/common.dto';
+import { WebResponse } from '../../common/common.interface';
 import {
   findByProductIdInventoryResDto as findByProductId,
   findAllInventoryResDto as findAll,

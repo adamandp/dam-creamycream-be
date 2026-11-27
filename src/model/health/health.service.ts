@@ -5,8 +5,8 @@ import {
   HttpHealthIndicator,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
-import { RedisService } from 'src/common/redis/redis.service';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { RedisService } from '../../common/redis/redis.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 
 @Injectable()
 export class HealthService {

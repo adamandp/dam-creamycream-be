@@ -6,7 +6,7 @@ import {
 import { UpdateStatusShipmentDto } from './dto/update-shipment.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import {
   FindAllShipmentDto as FindAllDto,
   FindByIdShipmentDto as FindByIdDto,
@@ -14,10 +14,10 @@ import {
   ShippingData,
   ShippingResponse,
 } from './shipments.interface';
-import { WebResponse } from 'src/common/common.interface';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
-import { ErrorMessage, Messages } from 'src/utils/message.helper';
+import { WebResponse } from '../../common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
+import { ErrorMessage, Messages } from '../../utils/message.helper';
 import { CostDto, QuoteDto } from './dto/cost-shipment.dto';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';

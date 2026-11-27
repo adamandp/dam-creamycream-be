@@ -1,9 +1,9 @@
-import { OrderStatus, PrismaClient } from 'src/generated/prisma/client';
+import { OrderStatus, PrismaClient } from '../../src/generated/prisma/client';
 import {
   CheckOutDto,
   ShipmentInputDto,
   PaymentInputDto,
-} from 'src/model/orders/dto/checkout.dto';
+} from '../../src/model/orders/dto/checkout.dto';
 
 const couriers = [
   'jne',

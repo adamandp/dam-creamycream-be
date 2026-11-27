@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { UpdateVoucherDto } from './dto/update-voucher.dto';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
 import {
   ValidateVoucherDto as ValidateDto,
   FindAllVoucherDto as FindAllDto,
   FindByIdVoucherDto as FindByIdDto,
 } from './vouchers.interface';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
 import { ProductsService } from '../products/products.service';
-import { validateUpdate } from 'src/utils/validate-update';
+import { validateUpdate } from '../../utils/validate-update';
 
 @Injectable()
 export class VouchersService {

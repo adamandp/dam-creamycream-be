@@ -11,14 +11,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Public, Roles } from 'src/decorators/access.decorator';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
-import { PaginationDto } from 'src/common/common.dto';
+import { Public, Roles } from '../../decorators/access.decorator';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
+import { PaginationDto } from '../../common/common.dto';
 import { ApiBody, ApiHeader, ApiOperation } from '@nestjs/swagger';
 import { createZodDto } from 'nestjs-zod';
 import { paymentInputSchema, PaymentsService } from './payments.service';
-import { UserRateLimit } from 'src/guards/user-rate-limit.guard';
+import { UserRateLimit } from '../../guards/user-rate-limit.guard';
 import { Throttle } from '@nestjs/throttler';
 
 import type { RawBodyRequest } from '@nestjs/common';
@@ -27,7 +27,7 @@ import {
   QstashService,
   EXPIRE_PATH,
   RECONCILE_PATH,
-} from 'src/integrations/qstash/qstash.service';
+} from '../../integrations/qstash/qstash.service';
 import { z } from 'zod';
 class PaymentInputDto extends createZodDto(paymentInputSchema) {}
 

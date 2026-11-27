@@ -1,4 +1,4 @@
-import { DiscountType, PrismaClient } from 'src/generated/prisma/client';
+import { DiscountType, PrismaClient } from '../../src/generated/prisma/client';
 
 export async function seedDiscounts(prisma: PrismaClient) {
   const data = [

@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
 import { ProductsService } from '../products/products.service';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
 import {
   ValidateReviewResDto as ValidateDto,
   FindAllReviewResDto as FindAllDto,
@@ -16,8 +16,8 @@ import {
   FindByProductReviewResDto as FindByProductDto,
   FindByUserReviewResDto as FindByUserDto,
 } from './reviews.interface';
-import { validateUpdate } from 'src/utils/validate-update';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { validateUpdate } from '../../utils/validate-update';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Injectable()
 export class ReviewsService {

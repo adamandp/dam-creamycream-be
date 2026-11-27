@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserNotificationDto } from './dto/create-user-notification.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { NotificationsService } from '../notifications/notifications.service';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
 import {
   ValidateUserNotificationDto as ValidateDto,
   FindAllUserNotificationDto as FindAllDto,
@@ -17,7 +17,7 @@ import {
   FindByNotifiactionUserNotificationDto as FindByNotifiactionDto,
   FindByNotifiactionCountUserNotificationDto as FindByNotificationCount,
 } from './user-notifications.interface';
-import { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { JwtPayload } from '../../integrations/accounts/accounts.interface';
 
 @Injectable()
 export class UserNotificationsService {

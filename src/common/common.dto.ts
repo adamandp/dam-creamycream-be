@@ -1,5 +1,5 @@
 import { createZodDto } from 'nestjs-zod';
-import { coerceNumberMinMax } from 'src/utils/zod.helper';
+import { coerceNumberMinMax } from '../utils/zod.helper';
 import z from 'zod';
 
 const PaginationSchema = z.object({

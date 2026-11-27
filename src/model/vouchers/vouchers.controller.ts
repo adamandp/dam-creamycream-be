@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -18,8 +18,8 @@ import {
   FindAllVoucherDto as FindAllDto,
   FindByIdVoucherDto as FindByIdDto,
 } from './vouchers.interface';
-import type { WebResponse } from 'src/common/common.interface';
-import { PaginationDto } from 'src/common/common.dto';
+import type { WebResponse } from '../../common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
 
 @Roles('STORE_ADMIN')
 @Controller('vouchers')

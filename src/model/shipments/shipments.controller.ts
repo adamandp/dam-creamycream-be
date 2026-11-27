@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   BadRequestException,
@@ -12,17 +12,17 @@ import {
 } from '@nestjs/common';
 import { ShipmentsService } from './shipments.service';
 import { UpdateStatusShipmentDto } from './dto/update-shipment.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { WebResponse } from '../../common/common.interface';
 import {
   FindAllShipmentDto as FindAllDto,
   FindByIdShipmentDto as FindByIdDto,
   ShippingData,
 } from './shipments.interface';
-import { UserRateLimit } from 'src/guards/user-rate-limit.guard';
+import { UserRateLimit } from '../../guards/user-rate-limit.guard';
 import { PinoLogger } from 'nestjs-pino';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import { CostDto, QuoteDto } from './dto/cost-shipment.dto';
 
 @Roles('STORE_ADMIN')

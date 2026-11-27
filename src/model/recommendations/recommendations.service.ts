@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { DiscountType } from 'src/generated/prisma/client';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { DiscountType } from '../../generated/prisma/client';
 import {
   ProductWithRelations,
   ProductRecomendationRes,
   CategoriesRecomendationRes,
 } from './recommendations.interface';
-import { ProductWhereInput } from 'src/generated/prisma/models';
-import { Messages } from 'src/utils/message.helper';
-import { NotFoundException } from 'src/exceptions';
+import { ProductWhereInput } from '../../generated/prisma/models';
+import { Messages } from '../../utils/message.helper';
+import { NotFoundException } from '../../exceptions';
 
 @Injectable()
 export class RecommendationsService {

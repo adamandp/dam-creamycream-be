@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -14,12 +14,12 @@ import { NotificationsService } from './notifications.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { PinoLogger } from 'nestjs-pino';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 import {
   FindByIdNotificationDto as FindByIdDto,
   FindAllNotificationsDto as FindAllDto,
 } from './notifications.interface';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 
 @Roles('STORE_ADMIN')
 @Controller('notifications')

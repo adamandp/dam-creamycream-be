@@ -1,4 +1,4 @@
-import { baseBoolean, baseDate, baseUUID } from 'src/utils/zod.helper';
+import { baseBoolean, baseDate, baseUUID } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseUserNotificationSchema = z.object({

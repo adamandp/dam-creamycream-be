@@ -1,4 +1,4 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
+import { Public, Roles } from '../../decorators/access.decorator';
 import { Controller, Get } from '@nestjs/common';
 import { HealthService } from './health.service';
 import { HealthCheck } from '@nestjs/terminus';

@@ -1,4 +1,4 @@
-import { baseDate, baseEnum, baseNumber, baseUUID } from 'src/utils/zod.helper';
+import { baseDate, baseEnum, baseNumber, baseUUID } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseOrderSchema = z.object({

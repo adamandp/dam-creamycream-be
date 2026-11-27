@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
-import { NotFoundException } from 'src/exceptions';
-import { validateUpdate } from 'src/utils/validate-update';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
+import { NotFoundException } from '../../exceptions';
+import { validateUpdate } from '../../utils/validate-update';
 import {
   ValidateCategoryDto as ValidateDto,
   FindAllCategoryDto as FindAllDto,
   FindByIdCategoryDto as FindByIdDto,
 } from './categories.interface';
-import { RedisService } from 'src/common/redis/redis.service';
+import { RedisService } from '../../common/redis/redis.service';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()

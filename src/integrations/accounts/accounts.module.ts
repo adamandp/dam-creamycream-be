@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { RedisModule } from 'src/common/redis/redis.module';
-import { RedisService } from 'src/common/redis/redis.service';
-import { RedisThrottlerStorage } from 'src/common/redis/redis-throttler.storage';
+import { RedisModule } from '../../common/redis/redis.module';
+import { RedisService } from '../../common/redis/redis.service';
+import { RedisThrottlerStorage } from '../../common/redis/redis-throttler.storage';
 import { AccountsConfig } from '../../config/accounts.config';
 import { JwtGuard } from '../../guards/jwt.guard';
 import { RolesGuard } from '../../guards/roles.guard';

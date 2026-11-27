@@ -6,8 +6,8 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RedisService } from 'src/common/redis/redis.service';
-import { RedisThrottlerStorage } from 'src/common/redis/redis-throttler.storage';
+import { RedisService } from '../common/redis/redis.service';
+import { RedisThrottlerStorage } from '../common/redis/redis-throttler.storage';
 import { AuthenticatedRequest } from './jwt.guard';
 const KEY = 'user-rate-limit';
 export const UserRateLimit = (limit: number) => SetMetadata(KEY, limit);

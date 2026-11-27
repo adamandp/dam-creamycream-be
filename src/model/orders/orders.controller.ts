@@ -9,15 +9,15 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Roles } from 'src/decorators/access.decorator';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
-import { PaginationDto } from 'src/common/common.dto';
+import { Roles } from '../../decorators/access.decorator';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
+import { PaginationDto } from '../../common/common.dto';
 import { CheckOutDto } from './dto/checkout.dto';
 import { OrdersService } from './orders.service';
 import { z } from 'zod';
 import { ApiHeader, ApiOperation } from '@nestjs/swagger';
-import { UserRateLimit } from 'src/guards/user-rate-limit.guard';
+import { UserRateLimit } from '../../guards/user-rate-limit.guard';
 import { Throttle } from '@nestjs/throttler';
 
 @Controller('orders')

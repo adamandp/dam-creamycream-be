@@ -1,7 +1,7 @@
 import z from 'zod';
 import { BaseOrderSchema } from './orders.validation';
-import { DiscountType } from 'src/generated/prisma/enums';
-import { Product } from 'src/generated/prisma/client';
+import { DiscountType } from '../../generated/prisma/enums';
+import { Product } from '../../generated/prisma/client';
 
 export interface RawInventory {
   id: string;

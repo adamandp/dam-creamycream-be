@@ -1,9 +1,9 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
-import { AccountsClient } from 'src/integrations/accounts/accounts.client';
+import { Public, Roles } from '../../decorators/access.decorator';
+import { AccountsClient } from '../../integrations/accounts/accounts.client';
 import { Req } from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import type { JwtPayload } from '../../integrations/accounts/accounts.interface';
 import {
   Controller,
   Get,
@@ -18,14 +18,14 @@ import {
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import type { WebResponse } from 'src/common/common.interface';
+import type { WebResponse } from '../../common/common.interface';
 import {
   FindAllReviewResDto as FindAllDto,
   FindByIdReviewResDto as FindByIdDto,
   FindByProductReviewResDto as FindByProductDto,
   FindByUserReviewResDto as FindByUserDto,
 } from './reviews.interface';
-import { PaginationDto } from 'src/common/common.dto';
+import { PaginationDto } from '../../common/common.dto';
 
 @Roles('STORE_ADMIN')
 @Controller('reviews')

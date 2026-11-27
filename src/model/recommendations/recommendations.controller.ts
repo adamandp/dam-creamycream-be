@@ -1,8 +1,8 @@
-import { Public, Roles } from 'src/decorators/access.decorator';
+import { Public, Roles } from '../../decorators/access.decorator';
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { RecommendationsService } from './recommendations.service';
 import { PinoLogger } from 'nestjs-pino';
-import { WebResponse } from 'src/common/common.interface';
+import { WebResponse } from '../../common/common.interface';
 import {
   CategoriesRecomendationRes,
   ProductRecomendationRes,

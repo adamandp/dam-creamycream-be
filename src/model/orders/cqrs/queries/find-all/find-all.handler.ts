@@ -3,11 +3,11 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { FindAllOrderCommand } from './find-all.query';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { NotFoundException } from 'src/exceptions';
-import { FindAllOrderResDto as FindAllDto } from 'src/model/orders/orders.interface';
+import { PrismaService } from '../../../../../common/prisma/prisma.service';
+import { WebResponse } from '../../../../../common/common.interface';
+import { Messages } from '../../../../../utils/message.helper';
+import { NotFoundException } from '../../../../../exceptions';
+import { FindAllOrderResDto as FindAllDto } from '../../../orders.interface';
 
 @Injectable()
 @QueryHandler(FindAllOrderCommand)

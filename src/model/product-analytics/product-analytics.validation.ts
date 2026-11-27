@@ -1,4 +1,4 @@
-import { baseDate, baseUUID } from 'src/utils/zod.helper';
+import { baseDate, baseUUID } from '../../utils/zod.helper';
 import z from 'zod';
 
 export const BaseProductAnalyticsSchema = z.object({

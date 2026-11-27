@@ -1,4 +1,4 @@
-import { Roles } from 'src/decorators/access.decorator';
+import { Roles } from '../../decorators/access.decorator';
 import {
   Controller,
   Get,
@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
-import { PaginationDto } from 'src/common/common.dto';
-import { WebResponse } from 'src/common/common.interface';
+import { PaginationDto } from '../../common/common.dto';
+import { WebResponse } from '../../common/common.interface';
 import {
   findByProductIdInventoryResDto as findByProductId,
   findAllInventoryResDto as findAll,

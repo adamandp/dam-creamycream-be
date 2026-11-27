@@ -9,10 +9,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { createHash } from 'node:crypto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Prisma } from 'src/generated/prisma/client';
+import { PrismaService } from '../../../../../common/prisma/prisma.service';
+import { Prisma } from '../../../../../generated/prisma/client';
 import { CheckOutCommand } from './checkout.command';
-import { QstashService } from 'src/integrations/qstash/qstash.service';
+import { QstashService } from '../../../../../integrations/qstash/qstash.service';
 
 @CommandHandler(CheckOutCommand)
 @Injectable()

@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductDiscountDto } from './dto/create-product-discount.dto';
 import { PinoLogger } from 'nestjs-pino';
 // import { PrismaService } from 'src/common/prisma.module';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { ProductsService } from '../products/products.service';
 import { DiscountsService } from '../discounts/discounts.service';
-import { WebResponse } from 'src/common/common.interface';
-import { Messages } from 'src/utils/message.helper';
-import { PaginationDto } from 'src/common/common.dto';
+import { WebResponse } from '../../common/common.interface';
+import { Messages } from '../../utils/message.helper';
+import { PaginationDto } from '../../common/common.dto';
 import {
   ValidateProductDiscountDto as ValidateDto,
   FindAllProductDiscountResDto as FindAllDto,
   FindByIdProductDiscountResDto as FindByIdDto,
   FindByProductIdProductDiscountResDto as FindByProductIdDto,
 } from './product-discounts.interface';
-import { NotFoundException } from 'src/exceptions';
+import { NotFoundException } from '../../exceptions';
 
 @Injectable()
 export class ProductDiscountsService {

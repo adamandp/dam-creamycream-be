@@ -1,5 +1,5 @@
-import { PaymentStatus, PrismaClient } from 'src/generated/prisma/client';
-import { CheckOutDto } from 'src/model/orders/dto/checkout.dto';
+import { PaymentStatus, PrismaClient } from '../../src/generated/prisma/client';
+import { CheckOutDto } from '../../src/model/orders/dto/checkout.dto';
 
 export async function seedPayments(
   prisma: PrismaClient,

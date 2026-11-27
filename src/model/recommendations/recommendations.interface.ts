@@ -1,5 +1,5 @@
-import { Prisma } from 'src/generated/prisma/client';
-import { DiscountType } from 'src/generated/prisma/enums';
+import { Prisma } from '../../generated/prisma/client';
+import { DiscountType } from '../../generated/prisma/enums';
 
 interface ProductRecomendationRes {
   id: string;

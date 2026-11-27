@@ -1,9 +1,9 @@
 import z from 'zod';
 import { BaseOrderItemSchema, BaseOrderSchema } from '../orders.validation';
 import { createZodDto } from 'nestjs-zod';
-import { BaseShipmentSchema } from 'src/model/shipments/shipments.validation';
-import { BasePaymentSchema } from 'src/model/payments/payments.validation';
-import { baseUUID } from 'src/utils/zod.helper';
+import { BaseShipmentSchema } from '../../shipments/shipments.validation';
+import { BasePaymentSchema } from '../../payments/payments.validation';
+import { baseUUID } from '../../../utils/zod.helper';
 
 const OrderInputSchema = BaseOrderSchema.pick({
   userId: true,
