@@ -5,6 +5,7 @@ import { swaggerOptions } from './swagger.config';
 import { AccountsConfig } from './accounts.config';
 import helmet from 'helmet';
 import { timingSafeEqual } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { isIP } from 'node:net';
 import { Logger } from 'nestjs-pino';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -58,6 +59,40 @@ export function configureApp(
       res.type('html').send(`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Creamy Cream API Documentation</title><link rel="stylesheet" href="./swagger-ui.css"><link rel="icon" href="./favicon-32x32.png"></head><body><div id="swagger-ui"></div><script src="./swagger-ui-bundle.js"></script><script src="./swagger-ui-standalone-preset.js"></script><script src="./swagger-ui-init.js"></script></body></html>`);
     });
+  // Explicit paths make these assets visible to the serverless file tracer.
+  const assets = [
+    ['swagger-ui.css', require.resolve('swagger-ui-dist/swagger-ui.css')],
+    [
+      'swagger-ui-bundle.js',
+      require.resolve('swagger-ui-dist/swagger-ui-bundle.js'),
+    ],
+    [
+      'swagger-ui-standalone-preset.js',
+      require.resolve('swagger-ui-dist/swagger-ui-standalone-preset.js'),
+    ],
+    ['favicon-32x32.png', require.resolve('swagger-ui-dist/favicon-32x32.png')],
+    ['favicon-16x16.png', require.resolve('swagger-ui-dist/favicon-16x16.png')],
+  ];
+  for (const [name, file] of assets) {
+    app
+      .getHttpAdapter()
+      .get(
+        '/docs/' + name,
+        (_req: Request, res: Response, next: NextFunction) => {
+          res.sendFile(file, (error) => {
+            if (error) next(error);
+          });
+        },
+      );
+  }
+  if (process.env.VERCEL) {
+    console.info(
+      'Swagger asset bundle:',
+      assets.every(([, file]) => existsSync(file))
+        ? '5/5 present'
+        : 'incomplete',
+    );
+  }
   SwaggerModule.setup('docs', app, documentFactory, swaggerOptions);
   app.use(
     helmet({
