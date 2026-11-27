@@ -1,0 +1,5414 @@
+{
+  "AddressesController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "enum": [201]
+        },
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Address created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["statusCode", "message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "AddressesController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Address retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "destinationId": {
+                "type": "integer",
+                "nullable": true
+              },
+              "recipientName": {
+                "type": "string"
+              },
+              "recipientPhoneNumber": {
+                "type": "string"
+              },
+              "province": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "subdistrict": {
+                "type": "string"
+              },
+              "village": {
+                "type": "string"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "isPrimary": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "address",
+              "id",
+              "userId",
+              "destinationId",
+              "recipientName",
+              "recipientPhoneNumber",
+              "province",
+              "city",
+              "subdistrict",
+              "village",
+              "postalCode",
+              "isPrimary",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "AddressesController_findByUserId": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User Address retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "destinationId": {
+                "type": "integer",
+                "nullable": true
+              },
+              "recipientName": {
+                "type": "string"
+              },
+              "recipientPhoneNumber": {
+                "type": "string"
+              },
+              "province": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "subdistrict": {
+                "type": "string"
+              },
+              "village": {
+                "type": "string"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "isPrimary": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "address",
+              "id",
+              "userId",
+              "destinationId",
+              "recipientName",
+              "recipientPhoneNumber",
+              "province",
+              "city",
+              "subdistrict",
+              "village",
+              "postalCode",
+              "isPrimary",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "AddressesController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Address retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "destinationId": {
+              "type": "integer",
+              "nullable": true
+            },
+            "recipientName": {
+              "type": "string"
+            },
+            "recipientPhoneNumber": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "subdistrict": {
+              "type": "string"
+            },
+            "village": {
+              "type": "string"
+            },
+            "postalCode": {
+              "type": "string"
+            },
+            "isPrimary": {
+              "type": "boolean"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "address",
+            "id",
+            "userId",
+            "destinationId",
+            "recipientName",
+            "recipientPhoneNumber",
+            "province",
+            "city",
+            "subdistrict",
+            "village",
+            "postalCode",
+            "isPrimary",
+            "createdAt",
+            "updatedAt"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "AddressesController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Address updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "AddressesController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Address deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "NotificationsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Notification created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "NotificationsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Notification retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": ["message", "id", "createdAt", "updatedAt", "title"]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "NotificationsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Notification retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": ["message", "id", "createdAt", "updatedAt", "title"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "NotificationsController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Notification updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "NotificationsController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Notification deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "🎉 User Notification created successfully! Welcome aboard! 🚀"
+          ]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "UserNotificationsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "notificationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "isRead": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "notificationId",
+              "isRead"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_findByUser": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "notificationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "isRead": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "notificationId",
+              "isRead"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "notificationId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "isRead": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "userId",
+            "createdAt",
+            "updatedAt",
+            "notificationId",
+            "isRead"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_updateRead": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "🔄 User Notification updated successfully! Looking fresh! ✨"
+          ]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "UserNotificationsController_findByUserCount": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            }
+          },
+          "required": ["count"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_findByNotification": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "notificationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "isRead": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "notificationId",
+              "isRead"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserNotificationsController_findByNotificationCount": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 User Notification retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            }
+          },
+          "required": ["count"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "CategoriesController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 category created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "CategoriesController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 category retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "description",
+              "isActive",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "CategoriesController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 category retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "isActive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "name",
+            "description",
+            "isActive"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "CategoriesController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 category updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "CategoriesController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ category deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Product created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ProductsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Product retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "discountId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "imageUrl": {
+                "type": "string",
+                "nullable": true
+              },
+              "weightGrams": {
+                "type": "integer",
+                "nullable": true
+              },
+              "price": {
+                "type": "number"
+              },
+              "categoryId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "name",
+              "description",
+              "isActive",
+              "discountId",
+              "imageUrl",
+              "weightGrams",
+              "price",
+              "categoryId"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductsController_findCatalog": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Product retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              },
+              "discountPrice": {
+                "type": "number",
+                "nullable": true
+              },
+              "discountType": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "nullable": true,
+                    "enum": [null]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PERCENTAGE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FIXED"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PRICE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FREE_ITEM"]
+                  }
+                ]
+              },
+              "discountValue": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "imageUrl",
+              "description",
+              "rate",
+              "price"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductsController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Product updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ProductsController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Product deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductsController_updateImage": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Product Image updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid or missing image",
+      "404": "Product not found",
+      "500": "Unexpected server failure",
+      "413": "File larger than 2 MiB",
+      "409": "Database constraint or business conflict"
+    },
+    "request": {
+      "required": true,
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string",
+                "format": "binary",
+                "description": "One JPEG/JPG, PNG or WebP image, maximum 2 MiB. MIME and file signature are checked."
+              }
+            },
+            "required": ["file"]
+          }
+        }
+      }
+    }
+  },
+  "CartsController_addToCart": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Cart created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "CartsController_removeFromCart": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Cart deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "CartsController_findByUser": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Cart retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string",
+                "nullable": true
+              },
+              "category": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "discountPrice": {
+                "type": "number",
+                "nullable": true
+              },
+              "qty": {
+                "type": "number"
+              },
+              "discountId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "imageUrl",
+              "category",
+              "price",
+              "discountPrice",
+              "qty"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "DiscountsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Discount created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "DiscountsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "value": {
+                "type": "number",
+                "nullable": true
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "quantity": {
+                "type": "integer",
+                "nullable": true
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "discountType": {
+                "type": "string",
+                "enum": ["PERCENTAGE", "FIXED", "PRICE", "FREE_ITEM"]
+              },
+              "maxApplied": {
+                "type": "number"
+              },
+              "maxRedeemed": {
+                "type": "number"
+              },
+              "redeemedCount": {
+                "type": "number"
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "value",
+              "name",
+              "description",
+              "quantity",
+              "productId",
+              "discountType",
+              "maxApplied",
+              "maxRedeemed",
+              "redeemedCount",
+              "startDate",
+              "endDate"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "DiscountsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Discount retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "value": {
+              "type": "number",
+              "nullable": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "quantity": {
+              "type": "integer",
+              "nullable": true
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "discountType": {
+              "type": "string",
+              "enum": ["PERCENTAGE", "FIXED", "PRICE", "FREE_ITEM"]
+            },
+            "maxApplied": {
+              "type": "number"
+            },
+            "maxRedeemed": {
+              "type": "number"
+            },
+            "redeemedCount": {
+              "type": "number"
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "value",
+            "name",
+            "description",
+            "quantity",
+            "productId",
+            "discountType",
+            "maxApplied",
+            "maxRedeemed",
+            "redeemedCount",
+            "startDate",
+            "endDate"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "DiscountsController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Discount updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "DiscountsController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Discount deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "HealthController_check": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["error", "ok", "shutting_down"]
+        },
+        "info": {
+          "type": "object",
+          "properties": {
+            "redis": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up", "down"]
+                }
+              },
+              "required": ["status"]
+            },
+            "application": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up"]
+                }
+              },
+              "required": ["status"]
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "redis": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up", "down"]
+                }
+              },
+              "required": ["status"]
+            },
+            "application": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up"]
+                }
+              },
+              "required": ["status"]
+            }
+          }
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "redis": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up", "down"]
+                }
+              },
+              "required": ["status"]
+            },
+            "application": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["up"]
+                }
+              },
+              "required": ["status"]
+            }
+          },
+          "required": ["redis", "application"]
+        }
+      },
+      "required": ["status", "details"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "503": "The Health Check is not successful",
+      "500": "Unexpected server failure"
+    }
+  },
+  "HealthController_dbCheck": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "db": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["up"]
+            }
+          },
+          "required": ["status"]
+        }
+      },
+      "required": ["db"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "503": "The Health Check is not successful",
+      "500": "Unexpected server failure"
+    }
+  },
+  "InventoryController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Inventory retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "quantity": {
+                "type": "integer"
+              },
+              "reservedQuantity": {
+                "type": "integer"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "isActive",
+              "quantity",
+              "reservedQuantity",
+              "productId"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "InventoryController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Inventory retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "quantity": {
+              "type": "integer"
+            },
+            "reservedQuantity": {
+              "type": "integer"
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "isActive",
+            "quantity",
+            "reservedQuantity",
+            "productId"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "InventoryController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Inventory updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "InventoryController_findByProductId": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Inventory retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "quantity": {
+              "type": "integer"
+            },
+            "reservedQuantity": {
+              "type": "integer"
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "isActive",
+            "quantity",
+            "reservedQuantity",
+            "productId"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductAnalyticsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "🎉 Product Analytic created successfully! Welcome aboard! 🚀"
+          ]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ProductAnalyticsController_findByProduct": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Analytic retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": ["id", "userId", "createdAt", "productId"]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductAnalyticsController_findByUser": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Analytic retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": ["id", "userId", "createdAt", "productId"]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductAnalyticsController_findByProductCount": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Analytic retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            }
+          },
+          "required": ["count"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductDiscountsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "🎉 Product Discount created successfully! Welcome aboard! 🚀"
+          ]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ProductDiscountsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Discount retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "discountId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "isActive",
+              "discountId",
+              "productId"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductDiscountsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Discount retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "discountId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "isActive",
+            "discountId",
+            "productId"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductDiscountsController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Product Discount deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductDiscountsController_findByProductId": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "📦 Product Discount retrieved successfully! Smooth sailing! 😎"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "discountId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "isActive",
+              "discountId",
+              "productId"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "VouchersController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Voucher created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "VouchersController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["PERCENTAGE", "FIXED", "FREE_ITEM"]
+              },
+              "value": {
+                "type": "number",
+                "nullable": true
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "quantity": {
+                "type": "integer",
+                "nullable": true
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "maxRedeemed": {
+                "type": "number"
+              },
+              "redeemedCount": {
+                "type": "number"
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "code": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string",
+                "enum": ["CHECKOUT", "SHIPPING"]
+              },
+              "minimumPurchase": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "type",
+              "value",
+              "name",
+              "description",
+              "isActive",
+              "quantity",
+              "productId",
+              "maxRedeemed",
+              "redeemedCount",
+              "startDate",
+              "endDate",
+              "code",
+              "group",
+              "minimumPurchase"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "VouchersController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["PERCENTAGE", "FIXED", "FREE_ITEM"]
+            },
+            "value": {
+              "type": "number",
+              "nullable": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "quantity": {
+              "type": "integer",
+              "nullable": true
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "maxRedeemed": {
+              "type": "number"
+            },
+            "redeemedCount": {
+              "type": "number"
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "code": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string",
+              "enum": ["CHECKOUT", "SHIPPING"]
+            },
+            "minimumPurchase": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "type",
+            "value",
+            "name",
+            "description",
+            "isActive",
+            "quantity",
+            "productId",
+            "maxRedeemed",
+            "redeemedCount",
+            "startDate",
+            "endDate",
+            "code",
+            "group",
+            "minimumPurchase"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "VouchersController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Voucher updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "VouchersController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Voucher deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserVouchersController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 User Voucher created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "UserVouchersController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "voucherId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["USED", "CLAIMED"]
+              },
+              "claimedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "expiredAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "voucherId",
+              "status",
+              "claimedAt",
+              "expiredAt"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserVouchersController_findByUser": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "voucherId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["USED", "CLAIMED"]
+              },
+              "claimedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "expiredAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "voucherId",
+              "status",
+              "claimedAt",
+              "expiredAt"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserVouchersController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "voucherId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["USED", "CLAIMED"]
+            },
+            "claimedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expiredAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "id",
+            "userId",
+            "createdAt",
+            "updatedAt",
+            "voucherId",
+            "status",
+            "claimedAt",
+            "expiredAt"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "UserVouchersController_findByVoucher": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 User Voucher retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "voucherId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["USED", "CLAIMED"]
+              },
+              "claimedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "expiredAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "voucherId",
+              "status",
+              "claimedAt",
+              "expiredAt"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ReviewsController_create": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🎉 Review created successfully! Welcome aboard! 🚀"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "502": "Upstream service unavailable or invalid result",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ReviewsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Review retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "productId",
+              "rating",
+              "comment"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ReviewsController_findByProduct": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Review retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "rate",
+              "comment",
+              "createdAt",
+              "name",
+              "imageUrl"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ReviewsController_findByUser": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Review retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "productId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "productId",
+              "rating",
+              "comment"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ReviewsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Review retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "productId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "rating": {
+              "type": "number"
+            },
+            "comment": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "id",
+            "userId",
+            "createdAt",
+            "updatedAt",
+            "productId",
+            "rating",
+            "comment"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ReviewsController_update": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Review updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input or unchanged update",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "ReviewsController_remove": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🗑️ Review deleted successfully! Sayonara! 👋"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ShipmentsController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Shipment retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED"]
+              },
+              "orderId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "courier": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string"
+              },
+              "cost": {
+                "type": "number"
+              },
+              "estimated": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "deliveredAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "trackingNumber": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "description",
+              "status",
+              "orderId",
+              "courier",
+              "service",
+              "cost",
+              "estimated",
+              "deliveredAt",
+              "trackingNumber"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ShipmentsController_findById": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Shipment retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED"]
+            },
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "courier": {
+              "type": "string"
+            },
+            "service": {
+              "type": "string"
+            },
+            "cost": {
+              "type": "number"
+            },
+            "estimated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "deliveredAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "trackingNumber": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "description",
+            "status",
+            "orderId",
+            "courier",
+            "service",
+            "cost",
+            "estimated",
+            "deliveredAt",
+            "trackingNumber"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ShipmentsController_updateStatus": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["🔄 Shipment updated successfully! Looking fresh! ✨"]
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ShipmentsController_destinations": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Provider-defined RajaOngkir destination record; fields are not validated locally."
+          }
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    },
+    "description": "Search RajaOngkir domestic destination records. The upstream result is validated as an array; individual record properties are provider-defined."
+  },
+  "ShipmentsController_quote": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "cost": {
+                "type": "number"
+              },
+              "etd": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "code",
+              "service",
+              "description",
+              "cost",
+              "etd"
+            ]
+          }
+        }
+      },
+      "required": ["message", "status", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ShipmentsController_cost": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "cost": {
+                "type": "number"
+              },
+              "etd": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "code",
+              "service",
+              "description",
+              "cost",
+              "etd"
+            ]
+          }
+        }
+      },
+      "required": ["message", "status", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "409": "Database constraint or business conflict"
+    }
+  },
+  "OrdersController_checkout": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["Order created", "Order already created"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "paymentId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "finalPrice": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "PAID", "SHIPPED", "DELIVERED", "CANCELLED"]
+            }
+          },
+          "required": ["orderId", "paymentId", "finalPrice", "status"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "404": "Address or related resource not found",
+      "409": "Idempotency conflict, invalid stock, voucher, discount or shipping state",
+      "502": "Shipping provider response unavailable or invalid"
+    },
+    "description": "Customer checkout. Prices, discounts, shipping and stock reservation are calculated server-side. Reuse the same UUID Idempotency-Key only for an identical checkout."
+  },
+  "OrdersController_mine": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "PAID"]
+              },
+              "addressId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "addressSnapshot": {
+                "description": "Provider-specific or stored JSON; structure may vary."
+              },
+              "checkoutKey": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "checkoutHash": {
+                "type": "string",
+                "nullable": true
+              },
+              "voucherAmount": {
+                "type": "number"
+              },
+              "discountAmount": {
+                "type": "number"
+              },
+              "totalPrice": {
+                "type": "number"
+              },
+              "finalPrice": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "status",
+              "addressId",
+              "addressSnapshot",
+              "checkoutKey",
+              "checkoutHash",
+              "voucherAmount",
+              "discountAmount",
+              "totalPrice",
+              "finalPrice"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "OrdersController_findAll": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Orders retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "PAID"]
+              },
+              "addressId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "addressSnapshot": {
+                "description": "Provider-specific or stored JSON; structure may vary."
+              },
+              "checkoutKey": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "checkoutHash": {
+                "type": "string",
+                "nullable": true
+              },
+              "voucherAmount": {
+                "type": "number"
+              },
+              "discountAmount": {
+                "type": "number"
+              },
+              "totalPrice": {
+                "type": "number"
+              },
+              "finalPrice": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "userId",
+              "createdAt",
+              "updatedAt",
+              "status",
+              "addressId",
+              "addressSnapshot",
+              "checkoutKey",
+              "checkoutHash",
+              "voucherAmount",
+              "discountAmount",
+              "totalPrice",
+              "finalPrice"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["message", "data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "404": "No orders found"
+    }
+  },
+  "OrdersController_findOne": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "PAID"]
+            },
+            "addressId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "addressSnapshot": {
+              "description": "Provider-specific or stored JSON; structure may vary."
+            },
+            "checkoutKey": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "checkoutHash": {
+              "type": "string",
+              "nullable": true
+            },
+            "voucherAmount": {
+              "type": "number"
+            },
+            "discountAmount": {
+              "type": "number"
+            },
+            "totalPrice": {
+              "type": "number"
+            },
+            "finalPrice": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "userId",
+            "createdAt",
+            "updatedAt",
+            "status",
+            "addressId",
+            "addressSnapshot",
+            "checkoutKey",
+            "checkoutHash",
+            "voucherAmount",
+            "discountAmount",
+            "totalPrice",
+            "finalPrice"
+          ]
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "PaymentsController_list": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "CANCELLED", "PAID", "FAILED"]
+              },
+              "orderId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "method": {
+                "type": "string"
+              },
+              "methodType": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "initializationStartedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "cancelRequestedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "nextCheckAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "externalPaymentId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "providerStatus": {
+                "type": "string",
+                "nullable": true
+              },
+              "providerUpdatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "transactionCode": {
+                "type": "string",
+                "nullable": true
+              },
+              "transactionId": {
+                "type": "string",
+                "nullable": true
+              },
+              "expiryDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "paidAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "status",
+              "orderId",
+              "method",
+              "methodType",
+              "amount",
+              "initializationStartedAt",
+              "cancelRequestedAt",
+              "nextCheckAt",
+              "externalPaymentId",
+              "providerStatus",
+              "providerUpdatedAt",
+              "transactionCode",
+              "transactionId",
+              "expiryDate",
+              "paidAt"
+            ]
+          }
+        },
+        "paging": {
+          "type": "object",
+          "properties": {
+            "currentPage": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "totalItems": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            }
+          },
+          "required": ["currentPage", "pageSize", "totalItems", "totalPages"]
+        }
+      },
+      "required": ["data", "paging"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure"
+    }
+  },
+  "PaymentsController_notification": {
+    "schema": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": ["message"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": ["status"]
+            }
+          },
+          "required": ["data"]
+        }
+      ]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid callback body, event or unsupported event type",
+      "403": "Invalid callback signature",
+      "500": "Unexpected server failure",
+      "409": "Payment or order state conflict"
+    },
+    "request": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "eventId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "eventType": {
+                    "type": "string",
+                    "enum": ["payment.status_changed"]
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "referenceId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "currency": {
+                        "type": "string",
+                        "enum": ["IDR"]
+                      },
+                      "paymentMethod": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "transactionId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "providerPaymentType": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "paymentInstructions": {
+                        "description": "Provider-specific or stored JSON; structure may vary."
+                      },
+                      "expiresAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "referenceId",
+                      "amount",
+                      "currency",
+                      "paymentMethod",
+                      "status",
+                      "updatedAt"
+                    ]
+                  }
+                },
+                "required": ["eventId", "eventType", "data"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "eventId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "eventType": {
+                    "type": "string",
+                    "enum": ["refund.status_changed"]
+                  },
+                  "data": {
+                    "description": "Refund event payload; acknowledged without applying payment status."
+                  }
+                },
+                "required": ["eventId", "eventType", "data"]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "description": "Internal Payment Service callback. HMAC-SHA256 covers timestamp, event ID and raw body; timestamp tolerance 300 seconds. No user JWT required."
+  },
+  "PaymentsController_start": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "paymentId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "referenceId": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "currency": {
+              "type": "string",
+              "enum": ["IDR"]
+            },
+            "paymentMethod": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "transactionId": {
+              "type": "string",
+              "nullable": true
+            },
+            "providerPaymentType": {
+              "type": "string",
+              "nullable": true
+            },
+            "paymentInstructions": {
+              "description": "Provider-specific or stored JSON; structure may vary."
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "required": [
+            "orderId",
+            "paymentId",
+            "id",
+            "referenceId",
+            "amount",
+            "currency",
+            "paymentMethod",
+            "status",
+            "updatedAt"
+          ]
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "409": "Business or related-resource conflict",
+      "500": "Unexpected server failure",
+      "502": "Payment provider or Payment Service result uncertain",
+      "503": "Payment Service unavailable"
+    }
+  },
+  "PaymentsController_sync": {
+    "schema": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["PENDING", "CANCELLED", "PAID", "FAILED"]
+                }
+              },
+              "required": ["status"]
+            }
+          },
+          "required": ["data"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "referenceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string",
+                  "enum": ["IDR"]
+                },
+                "paymentMethod": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "transactionId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "providerPaymentType": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "paymentInstructions": {
+                  "description": "Provider-specific or stored JSON; structure may vary."
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "referenceId",
+                "amount",
+                "currency",
+                "paymentMethod",
+                "status",
+                "updatedAt"
+              ]
+            }
+          },
+          "required": ["data"]
+        }
+      ]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "500": "Unexpected server failure",
+      "404": "Order or payment not found",
+      "409": "Payment state conflict",
+      "502": "Payment provider or Payment Service result uncertain",
+      "503": "Payment Service unavailable"
+    }
+  },
+  "PaymentsController_cancel": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            }
+          },
+          "required": ["status"]
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure",
+      "409": "Payment state conflict",
+      "502": "Payment provider or Payment Service result uncertain",
+      "503": "Payment Service unavailable"
+    }
+  },
+  "PaymentsController_methods": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "sandbox": {
+                "type": "boolean"
+              },
+              "stores": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "clientKey": {
+                "type": "string"
+              }
+            },
+            "required": ["code", "sandbox"]
+          }
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "500": "Unexpected server failure"
+    }
+  },
+  "PaymentsController_expireCheckout": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "503": "Service unavailable / operation not due",
+      "403": "Forbidden or invalid signature",
+      "500": "Unexpected server failure"
+    },
+    "description": "QStash-signed checkout expiration; only eligible pending, never-initialized payments expire."
+  },
+  "PaymentsController_reconcile": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["message"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "503": "Service unavailable / operation not due",
+      "403": "Forbidden or invalid signature",
+      "500": "Unexpected server failure"
+    },
+    "request": {
+      "required": true,
+      "description": "Signed raw body. Scheduled publisher sends an empty JSON object.",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "example": {}
+        }
+      }
+    },
+    "description": "QStash-signed abandoned checkout reconciliation. Publisher normally sends {}."
+  },
+  "PaymentsController_instructions": {
+    "schema": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "nullable": true,
+              "enum": [null]
+            }
+          },
+          "required": ["data"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "referenceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string",
+                  "enum": ["IDR"]
+                },
+                "paymentMethod": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "transactionId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "providerPaymentType": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "paymentInstructions": {
+                  "description": "Provider-specific or stored JSON; structure may vary."
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "referenceId",
+                "amount",
+                "currency",
+                "paymentMethod",
+                "status",
+                "updatedAt"
+              ]
+            }
+          },
+          "required": ["data"]
+        }
+      ]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "502": "Upstream service unavailable or invalid result",
+      "500": "Unexpected server failure",
+      "404": "Order or payment not found",
+      "409": "Payment state conflict",
+      "503": "Payment Service unavailable"
+    }
+  },
+  "PaymentsController_find": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "CANCELLED", "PAID", "FAILED"]
+            },
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "method": {
+              "type": "string"
+            },
+            "methodType": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "initializationStartedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "cancelRequestedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "nextCheckAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "externalPaymentId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "providerStatus": {
+              "type": "string",
+              "nullable": true
+            },
+            "providerUpdatedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "transactionCode": {
+              "type": "string",
+              "nullable": true
+            },
+            "transactionId": {
+              "type": "string",
+              "nullable": true
+            },
+            "expiryDate": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "paidAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "required": [
+            "id",
+            "createdAt",
+            "updatedAt",
+            "status",
+            "orderId",
+            "method",
+            "methodType",
+            "amount",
+            "initializationStartedAt",
+            "cancelRequestedAt",
+            "nextCheckAt",
+            "externalPaymentId",
+            "providerStatus",
+            "providerUpdatedAt",
+            "transactionCode",
+            "transactionId",
+            "expiryDate",
+            "paidAt"
+          ]
+        }
+      },
+      "required": ["data"]
+    },
+    "errors": {
+      "401": "Missing, expired or invalid access token",
+      "403": "Role or permission denied",
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "RecommendationsController_getClassic": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              },
+              "discountPrice": {
+                "type": "number",
+                "nullable": true
+              },
+              "discountType": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "nullable": true,
+                    "enum": [null]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PERCENTAGE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FIXED"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PRICE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FREE_ITEM"]
+                  }
+                ]
+              },
+              "discountValue": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "imageUrl",
+              "description",
+              "rate",
+              "price"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "RecommendationsController_getCategories": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "categoryId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": ["id", "imageUrl", "category", "categoryId"]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "RecommendationsController_getOffers": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              },
+              "discountPrice": {
+                "type": "number",
+                "nullable": true
+              },
+              "discountType": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "nullable": true,
+                    "enum": [null]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PERCENTAGE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FIXED"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PRICE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FREE_ITEM"]
+                  }
+                ]
+              },
+              "discountValue": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "imageUrl",
+              "description",
+              "rate",
+              "price"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "RecommendationsController_getRelated": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              },
+              "discountPrice": {
+                "type": "number",
+                "nullable": true
+              },
+              "discountType": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "nullable": true,
+                    "enum": [null]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PERCENTAGE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FIXED"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["PRICE"]
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["FREE_ITEM"]
+                  }
+                ]
+              },
+              "discountValue": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "imageUrl",
+              "description",
+              "rate",
+              "price"
+            ]
+          }
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductController_findInformation": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Product retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "information": {
+              "type": "string"
+            }
+          },
+          "required": ["information"]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  },
+  "ProductController_findOne": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": ["📦 Product retrieved successfully! Smooth sailing! 😎"]
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "imageUrl": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "rate": {
+              "type": "number"
+            },
+            "category": {
+              "type": "string"
+            },
+            "sales": {
+              "type": "number"
+            },
+            "price": {
+              "type": "number"
+            },
+            "discountPrice": {
+              "type": "number",
+              "nullable": true
+            },
+            "discountType": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "nullable": true,
+                  "enum": [null]
+                },
+                {
+                  "type": "string",
+                  "enum": ["PERCENTAGE"]
+                },
+                {
+                  "type": "string",
+                  "enum": ["FIXED"]
+                },
+                {
+                  "type": "string",
+                  "enum": ["PRICE"]
+                },
+                {
+                  "type": "string",
+                  "enum": ["FREE_ITEM"]
+                }
+              ]
+            },
+            "discountValue": {
+              "type": "number",
+              "nullable": true
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "imageUrl",
+            "description",
+            "rate",
+            "category",
+            "sales",
+            "price"
+          ]
+        }
+      },
+      "required": ["message", "data"]
+    },
+    "errors": {
+      "429": "Rate limit exceeded",
+      "400": "Invalid input / validation",
+      "404": "Resource not found",
+      "500": "Unexpected server failure"
+    }
+  }
+}

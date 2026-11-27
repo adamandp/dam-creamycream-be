@@ -268,7 +268,7 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
         expect.objectContaining({ name: 'Idempotency-Key', required: true }),
       ]),
     );
-    expect(r.body.paths['/payments/webhook'].post.security).toEqual([]);
+    expect(r.body.paths['/payments/webhook'].post.security).toEqual([{ paymentWebhookSignature: [] }]);
     for (const path of ['/payments/expire-checkout', '/payments/reconcile']) {
       expect(r.body.paths[path].post.parameters).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Upstash-Signature', required: true })]));
     }
