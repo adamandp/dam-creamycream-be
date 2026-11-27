@@ -12,6 +12,7 @@ import { createHash } from 'node:crypto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Prisma } from 'src/generated/prisma/client';
 import { CheckOutCommand } from './checkout.command';
+import { QstashService } from 'src/integrations/qstash/qstash.service';
 
 @CommandHandler(CheckOutCommand)
 @Injectable()
@@ -19,6 +20,7 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
+    private readonly qstash: QstashService,
   ) {}
 
   async execute({ payload, actor, key }: CheckOutCommand) {
@@ -109,7 +111,7 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
       );
 
     try {
-      return await this.prisma.$transaction(
+      const result = await this.prisma.$transaction(
         async (tx) => {
           // Serialize checkout creation for an account across processes.
           await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'checkout:' + userId},0))::text`;
@@ -385,12 +387,15 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
             include: { payments: true },
           });
           return {
-            message: 'Order created',
-            data: {
-              orderId: created.id,
-              paymentId: created.payments[0].id,
-              finalPrice,
-              status: created.status,
+            deadline: created.payments[0].expiryDate,
+            response: {
+              message: 'Order created',
+              data: {
+                orderId: created.id,
+                paymentId: created.payments[0].id,
+                finalPrice,
+                status: created.status,
+              },
             },
           };
         },
@@ -399,6 +404,12 @@ export class CheckoutOrderHandler implements ICommandHandler<CheckOutCommand> {
           timeout: 10000,
         },
       );
+      if (result.deadline)
+        await this.qstash.publishExpiration(
+          result.response.data.orderId,
+          result.deadline,
+        );
+      return result.response;
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&

@@ -2,9 +2,9 @@
 
 Generated from current controller source. Do not edit manually. Run `npm run docs:generate`.
 
-All URLs are relative to the commerce API base URL. Public routes do not require a Bearer token; the Payment Service webhook requires a valid signature. Protected routes require a valid Accounts Service access JWT. DTO names link to the contract in Swagger and source. A customer route is scoped to the current actor where applicable.
+All URLs are relative to the commerce API base URL. Public routes do not require a Bearer token; the Payment Service webhook and QStash expiration/reconciliation routes require valid signatures. Protected routes require a valid Accounts Service access JWT. DTO names link to the contract in Swagger and source. A customer route is scoped to the current actor where applicable.
 
-**95 endpoints.**
+**96 endpoints.**
 
 
 ## addresses
@@ -109,7 +109,8 @@ Source: [`src/model/payments/payments.controller.ts`](../../src/model/payments/p
 | POST | `/payments/:orderId/sync` | CUSTOMER | Headers authorization: string; Param orderId, ParseUUIDPipe: string | `sync` |
 | POST | `/payments/:orderId/cancel` | CUSTOMER | Headers authorization: string; Param orderId, ParseUUIDPipe: string | `cancel` |
 | GET | `/payments/methods` | CUSTOMER, STORE_ADMIN | Headers authorization: string | `methods` |
-| GET | `/payments/reconcile` | Public | Headers authorization: string | `reconcile` |
+| POST | `/payments/expire-checkout` | Public | Headers upstash-signature: string | `expireCheckout` |
+| POST | `/payments/reconcile` | Public | Headers upstash-signature: string | `reconcile` |
 | GET | `/payments/:orderId/instructions` | CUSTOMER, STORE_ADMIN | Param orderId, ParseUUIDPipe: string; Headers authorization: string | `instructions` |
 | GET | `/payments/:orderId` | CUSTOMER, STORE_ADMIN | Param orderId, ParseUUIDPipe: string | `find` |
 

@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { generateKeyPairSync, randomUUID, createHmac } from 'node:crypto';
+import { generateKeyPairSync, randomUUID, createHmac, createHash } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
 import request from 'supertest';
 import axios from 'axios';
@@ -118,7 +118,11 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
       PAYMENT_SERVICE_URL: 'http://127.0.0.1:9998',
       PAYMENT_INTERNAL_HMAC_SECRET: 'internal-secret',
       WEBHOOK_CALLBACK_SECRET: secret,
-      CRON_SECRET: 'test-cron',
+      QSTASH_URL: 'https://qstash.upstash.io',
+      QSTASH_TOKEN: 'fixture',
+      QSTASH_CURRENT_SIGNING_KEY: 'fixture-current',
+      QSTASH_NEXT_SIGNING_KEY: 'fixture-next',
+      PUBLIC_BASE_URL: 'https://store.example.com/core-service',
       LOG_LEVEL: 'silent',
     });
     jest.spyOn(axios, 'post').mockResolvedValue({data:{data:[{code:'jne',service:'REG',cost:10000,etd:'2-3'}]}});
@@ -269,13 +273,16 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
       ]),
     );
     expect(r.body.paths['/payments/webhook'].post.security).toEqual([]);
+    for (const path of ['/payments/expire-checkout', '/payments/reconcile']) {
+      expect(r.body.paths[path].post.parameters).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Upstash-Signature', required: true })]));
+    }
     expect(r.body.components.schemas.CheckOutDto).toBeDefined();
     expect(
       Object.values(r.body.paths).reduce(
         (n: number, path: any) => n + Object.keys(path).length,
         0,
       ),
-    ).toBe(95);
+    ).toBe(96);
   });
   it('rejects invalid quantities and another account address', async () => {
     await checkout(randomUUID(), {
@@ -480,6 +487,30 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
       ).reservedQuantity,
     ).toBe(2);
     await f.send().expect(201);
+  });
+  it('authenticates delayed checkout expiration and releases exactly once', async () => {
+    const f = await fixture();
+    const orderId = (await f.send().expect(201)).body.data.orderId;
+    const raw = JSON.stringify({ orderId });
+    const now = Math.floor(Date.now() / 1000);
+    const signature = jwt.sign({
+      iss: 'Upstash', sub: process.env.PUBLIC_BASE_URL + '/payments/expire-checkout',
+      iat: now, nbf: now - 1, exp: now + 60, jti: randomUUID(),
+      body: createHash('sha256').update(raw).digest('base64url'),
+    }, { secret: 'fixture-current', algorithm: 'HS256' });
+    const expire = (signed = true) => {
+      const req = request(app.getHttpServer()).post('/payments/expire-checkout')
+        .set('Content-Type', 'application/json');
+      if (signed) req.set('Upstash-Signature', signature);
+      return req.send(raw);
+    };
+    await expire(false).expect(403);
+    await expire().expect(503);
+    const past = new Date(Date.now() - 1000);
+    await db.payment.update({ where: { orderId }, data: { expiryDate: past, nextCheckAt: past } });
+    await Promise.all([expire().expect(200), expire().expect(200)]);
+    expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).status).toBe('CANCELLED');
+    expect((await db.inventory.findUniqueOrThrow({where: {productId: f.product.id}})).reservedQuantity).toBe(0);
   });
   it('protects physical stock in concurrent checkouts', async () => {
     const f = await fixture(1, 2);

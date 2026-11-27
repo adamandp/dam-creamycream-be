@@ -20,7 +20,7 @@ npm run build
 npm run start:dev
 ```
 
-Development Swagger: /docs. Production Swagger uses HTTP Basic authentication. Vercel/serverless uses the payment service callback and the scheduled checkout cleanup route. Do not run db:setup against the legacy database.
+Development Swagger: /docs. Production Swagger uses HTTP Basic authentication. Vercel/serverless uses the payment service callback and the QStash delayed checkout expiration and scheduled reconciliation routes. Do not run db:setup against the legacy database.
 
 ## Validation
 

@@ -465,27 +465,51 @@ export class PaymentsService {
       ),
     );
   }
+  async expireCheckout(orderId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      await this.lock(tx, orderId);
+      const current = await tx.payment.findUnique({
+        where: { orderId },
+        include: { orders: true },
+      });
+      if (
+        !current ||
+        current.status !== 'PENDING' ||
+        current.orders.status !== 'PENDING' ||
+        current.initializationStartedAt ||
+        !current.expiryDate
+      )
+        return { message: 'Checkout unchanged' };
+      if (current.expiryDate > new Date())
+        throw new ServiceUnavailableException('Checkout expiration not due');
+      await this.finalize(tx, orderId, 'CANCELLED');
+      return { message: 'Checkout expired' };
+    });
+  }
+
   async reconcileDue(limit = 50) {
     const due = await this.prisma.payment.findMany({
       where: {
         status: 'PENDING',
+        orders: { status: 'PENDING' },
         initializationStartedAt: null,
         expiryDate: { lte: new Date() },
       },
+      orderBy: [{ expiryDate: 'asc' }, { id: 'asc' }],
       take: limit,
     });
-    for (const p of due)
-      await this.prisma.$transaction(async (tx) => {
-        await this.lock(tx, p.orderId);
-        const current = await tx.payment.findUnique({ where: { id: p.id } });
-        if (
-          current?.status === 'PENDING' &&
-          !current.initializationStartedAt &&
-          current.expiryDate &&
-          current.expiryDate <= new Date()
-        )
-          await this.finalize(tx, p.orderId, 'CANCELLED');
-      });
+    let failed = false;
+    for (const p of due) {
+      try {
+        await this.expireCheckout(p.orderId);
+      } catch {
+        failed = true;
+      }
+    }
+    if (failed)
+      throw new ServiceUnavailableException(
+        'Checkout reconciliation incomplete',
+      );
     return { message: 'Abandoned checkouts reconciled' };
   }
   private async finalize(

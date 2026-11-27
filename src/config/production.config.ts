@@ -1,3 +1,5 @@
+import { qstashConfig } from './qstash.config';
+
 export function validateProductionEnvironment(
   env: NodeJS.ProcessEnv = process.env,
 ) {
@@ -20,7 +22,10 @@ export function validateProductionEnvironment(
     'RAJAONGKIR_BASE_URL',
     'RAJAONGKIR_API_KEY',
     'SHIPPING_ORIGIN_ID',
-    'CRON_SECRET',
+    'QSTASH_URL',
+    'QSTASH_TOKEN',
+    'QSTASH_CURRENT_SIGNING_KEY',
+    'QSTASH_NEXT_SIGNING_KEY',
     'DOCS_USERNAME',
     'DOCS_PASSWORD',
   ]) {
@@ -57,6 +62,7 @@ export function validateProductionEnvironment(
     Number(env.SHIPPING_ORIGIN_ID) < 1
   )
     throw new Error('Invalid shipping origin');
+  qstashConfig(env);
   if (env.NODE_TLS_REJECT_UNAUTHORIZED === '0')
     throw new Error('TLS certificate verification must be enabled');
 }
