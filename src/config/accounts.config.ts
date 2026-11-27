@@ -5,8 +5,6 @@ import { createPublicKey } from 'node:crypto';
 @Injectable()
 export class AccountsConfig {
   readonly publicKey: string;
-  readonly issuer: string;
-  readonly audience: string;
   readonly baseUrl: string;
   readonly roles: Record<'STORE_ADMIN' | 'CUSTOMER', string>;
   readonly origins: string[];
@@ -27,8 +25,6 @@ export class AccountsConfig {
       (key.asymmetricKeyDetails?.modulusLength ?? 0) < 2048
     )
       throw new Error('Expected an RSA public key of at least 2048 bits');
-    this.issuer = config.getOrThrow<string>('ACCOUNTS_JWT_ISSUER').trim();
-    this.audience = config.getOrThrow<string>('ACCOUNTS_JWT_AUDIENCE').trim();
     const url = new URL(config.getOrThrow<string>('ACCOUNTS_SERVICE_URL'));
     if (
       url.username ||
@@ -50,8 +46,6 @@ export class AccountsConfig {
       .map((v) => v.trim())
       .filter(Boolean);
     if (
-      !this.issuer ||
-      !this.audience ||
       Object.values(this.roles).some((v) => !v) ||
       new Set(Object.values(this.roles)).size !== 2 ||
       Object.values(this.roles).includes('ACCOUNT_ADMIN') ||

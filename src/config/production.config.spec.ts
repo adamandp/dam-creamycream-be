@@ -10,8 +10,6 @@ describe('Production configuration', () => {
     REDIS_URL: 'rediss://redis.example.com',
     ACCOUNTS_SERVICE_URL: 'https://accounts.example.com',
     ACCOUNTS_JWT_PUBLIC_KEY: 'fixture',
-    ACCOUNTS_JWT_ISSUER: 'fixture',
-    ACCOUNTS_JWT_AUDIENCE: 'fixture',
     ROLE_STORE_ADMIN: 'STORE_ADMIN',
     ROLE_CUSTOMER: 'CUSTOMER',
     FRONTEND_ORIGINS: 'https://store.example.com',

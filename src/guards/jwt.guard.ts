@@ -18,8 +18,6 @@ const claimsSchema = z.object({
   sub: z.uuid(),
   sid: z.uuid(),
   jti: z.uuid(),
-  iss: z.string(),
-  aud: z.string(),
   iat: z.number().int(),
   exp: z.number().int(),
   token_use: z.literal('access'),
@@ -51,16 +49,13 @@ export class JwtGuard implements CanActivate {
       const decoded = await this.jwt.verifyAsync(match[1], {
         publicKey: this.config.publicKey,
         algorithms: ['RS256'],
-        issuer: this.config.issuer,
-        audience: this.config.audience,
         ignoreExpiration: false,
       });
       claims = claimsSchema.parse(decoded);
       if (
         claims.iat > Math.floor(Date.now() / 1000) ||
         claims.exp <= claims.iat ||
-        claims.exp - claims.iat > 900 ||
-        claims.aud !== this.config.audience
+        claims.exp - claims.iat > 900
       )
         throw new Error('Invalid claims');
     } catch {

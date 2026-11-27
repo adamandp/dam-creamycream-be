@@ -46,8 +46,6 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
         sub,
         sid: randomUUID(),
         jti: randomUUID(),
-        iss: 'https://test.accounts.local',
-        aud: 'test-api',
         iat: now,
         exp: now + 900,
         token_use: 'access',
@@ -106,8 +104,6 @@ describe('Checkout/payment HTTP pipeline (isolated services)', () => {
       ACCOUNTS_JWT_PUBLIC_KEY: keys.publicKey
         .export({ type: 'spki', format: 'pem' })
         .toString(),
-      ACCOUNTS_JWT_ISSUER: 'https://test.accounts.local',
-      ACCOUNTS_JWT_AUDIENCE: 'test-api',
       ACCOUNTS_SERVICE_URL: 'http://127.0.0.1:9999',
       ROLE_STORE_ADMIN: 'STORE_ADMIN',
       ROLE_CUSTOMER: 'CUSTOMER',

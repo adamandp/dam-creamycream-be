@@ -8,8 +8,6 @@ export function validateProductionEnvironment(
     'DATABASE_URL',
     'REDIS_URL',
     'ACCOUNTS_SERVICE_URL',
-    'ACCOUNTS_JWT_ISSUER',
-    'ACCOUNTS_JWT_AUDIENCE',
     'ROLE_STORE_ADMIN',
     'ROLE_CUSTOMER',
     'FRONTEND_ORIGINS',

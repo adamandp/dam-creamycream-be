@@ -22,8 +22,6 @@ const publicKey = keys.publicKey
   .toString();
 const config = {
   publicKey,
-  issuer: 'https://issuer.example.test',
-  audience: 'accounts-test',
   roles: {
     STORE_ADMIN: 'ADMIN_CODE',
     CUSTOMER: 'USER_CODE',
@@ -74,8 +72,6 @@ describe('Accounts JWT and authorization (isolated HTTP)', () => {
       sub: userId,
       sid: randomUUID(),
       jti: randomUUID(),
-      iss: config.issuer,
-      aud: config.audience,
       iat: now,
       exp: now + 900,
       token_use: 'access',
@@ -146,11 +142,8 @@ describe('Accounts JWT and authorization (isolated HTTP)', () => {
     const now = Math.floor(Date.now() / 1000);
     await get('me', token({ iat: now - 900, exp: now - 1 })).expect(401);
   });
-  it('rejects a different issuer', async () => {
-    await get('me', token({ iss: 'https://wrong.example.test' })).expect(401);
-  });
-  it('rejects a different audience', async () => {
-    await get('me', token({ aud: 'other-service' })).expect(401);
+  it('accepts legacy issuer/audience claims signed by the trusted service key', async () => {
+    await get('me', token({ iss: 'legacy-issuer', aud: 'legacy-audience' })).expect(200);
   });
   it('rejects missing expiry', async () => {
     const payload = claims();

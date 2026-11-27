@@ -11,7 +11,7 @@ This is the business API for Creamy Cream, not an identity provider. All paths a
 
 Customer: POST /auth/login/customer on Accounts Service. Store admin: POST /auth/login/store-admin on Accounts Service. Accounts Service also owns registration, refresh, logout, profile, password, sessions and OAuth.
 
-Call commerce API with Authorization: Bearer <access token>. Do not send refresh cookies, passwords, private keys or role overrides to commerce. Its guards verify signature (RS256), issuer, audience, expiry, issued-at, token type, UUID claims, forced-password-change flag and exact role codes. ACCOUNT_ADMIN does not have store access.
+Call commerce API with Authorization: Bearer <access token>. Do not send refresh cookies, passwords, private keys or role overrides to commerce. Its guards verify signature (RS256), expiry, issued-at, token type, UUID claims, forced-password-change flag and exact role codes. ACCOUNT_ADMIN does not have store access.
 
 Protected route success uses a JSON object with data and/or message. List endpoints may include paging (currentPage, pageSize, totalItems, totalPages). Default page=1, limit=10; integer values 1–100. Some legacy list endpoints return 404 on empty data. Consult endpoint-specific DTOs for filters.
 
