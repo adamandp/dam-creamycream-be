@@ -2,7 +2,7 @@ import {
   Body,
   Headers,
   Req,
-  ForbiddenException,
+  BadRequestException,
   Controller,
   Get,
   HttpCode,
@@ -15,7 +15,7 @@ import { Public, Roles } from 'src/decorators/access.decorator';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import type { JwtPayload } from 'src/integrations/accounts/accounts.interface';
 import { PaginationDto } from 'src/common/common.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiOperation } from '@nestjs/swagger';
 import { createZodDto } from 'nestjs-zod';
 import { paymentInputSchema, PaymentsService } from './payments.service';
 import { UserRateLimit } from 'src/guards/user-rate-limit.guard';
@@ -23,14 +23,19 @@ import { Throttle } from '@nestjs/throttler';
 
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
-import { ConfigService } from '@nestjs/config';
+import {
+  QstashService,
+  EXPIRE_PATH,
+  RECONCILE_PATH,
+} from 'src/integrations/qstash/qstash.service';
+import { z } from 'zod';
 class PaymentInputDto extends createZodDto(paymentInputSchema) {}
 
 @Controller('payments')
 export class PaymentsController {
   constructor(
     private readonly paymentsService: PaymentsService,
-    private readonly config: ConfigService,
+    private readonly qstash: QstashService,
   ) {}
   @Roles('CUSTOMER', 'STORE_ADMIN')
   @Get()
@@ -91,11 +96,37 @@ export class PaymentsController {
     return this.paymentsService.methods(authorization);
   }
   @Public()
-  @Get('reconcile')
-  reconcile(@Headers('authorization') authorization: string) {
-    const secret = this.config.get<string>('CRON_SECRET');
-    if (!secret || authorization !== 'Bearer ' + secret)
-      throw new ForbiddenException();
+  @Post('expire-checkout')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'QStash signed checkout expiration' })
+  @ApiHeader({ name: 'Upstash-Signature', required: true })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['orderId'],
+      properties: { orderId: { type: 'string', format: 'uuid' } },
+    },
+  })
+  async expireCheckout(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('upstash-signature') signature: string,
+  ) {
+    this.qstash.assertSignature(signature, req.rawBody, EXPIRE_PATH);
+    const parsed = z.object({ orderId: z.uuid() }).strict().safeParse(req.body);
+    if (!parsed.success)
+      throw new BadRequestException('Invalid checkout expiration');
+    return this.paymentsService.expireCheckout(parsed.data.orderId);
+  }
+  @Public()
+  @Post('reconcile')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'QStash signed abandoned checkout reconciliation' })
+  @ApiHeader({ name: 'Upstash-Signature', required: true })
+  reconcile(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('upstash-signature') signature: string,
+  ) {
+    this.qstash.assertSignature(signature, req.rawBody, RECONCILE_PATH);
     return this.paymentsService.reconcileDue();
   }
   @Roles('CUSTOMER', 'STORE_ADMIN')

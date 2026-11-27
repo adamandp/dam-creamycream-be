@@ -8,7 +8,7 @@ const dec=(n,name)=>getDec(n).find(d=>callName(d)===name);
 const role=(n)=>dec(n,'Public')?'Public':dec(n,'Roles')?args(dec(n,'Roles')).join(', '):null;
 const dir='src/model';
 const files=fs.readdirSync(dir).flatMap(d=>fs.statSync(path.join(dir,d)).isDirectory()?fs.readdirSync(path.join(dir,d)).filter(f=>f.endsWith('.controller.ts')).map(f=>path.join(dir,d,f)):[]).sort();
-const lines=['# Endpoint reference','','Generated from current controller source. Do not edit manually. Run `npm run docs:generate`.','','All URLs are relative to the commerce API base URL. Public routes do not require a Bearer token; the Payment Service webhook requires a valid signature. Protected routes require a valid Accounts Service access JWT. DTO names link to the contract in Swagger and source. A customer route is scoped to the current actor where applicable.','',''];
+const lines=['# Endpoint reference','','Generated from current controller source. Do not edit manually. Run `npm run docs:generate`.','','All URLs are relative to the commerce API base URL. Public routes do not require a Bearer token; the Payment Service webhook and QStash expiration/reconciliation routes require valid signatures. Protected routes require a valid Accounts Service access JWT. DTO names link to the contract in Swagger and source. A customer route is scoped to the current actor where applicable.','',''];
 let count=0;
 for(const file of files){
  const source=ts.createSourceFile(file,fs.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true);
